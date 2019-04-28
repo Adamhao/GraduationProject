@@ -14,12 +14,15 @@ import java.sql.SQLException;
 @SpringBootTest
 public class ClientApplicationTests {
 
-	@Resource
-    private DataSource dataSource;
+	@Resource(name = "dataSource")
+    private DataSource dataSource1;
+	@Resource(name = "dataSource")
+    private DataSource dataSource2;
 
 	@Test
 	public void contextLoads() throws SQLException {
-        System.out.println(dataSource.getConnection());
+        //System.out.println(dataSource.getConnection());
+        System.out.println(dataSource1 == dataSource2);
     }
 
 }
