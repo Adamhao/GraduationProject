@@ -55,23 +55,21 @@ public class OhMyEmailTest {
                 @Override
                 public void run() {
                     try {
+                        long start = System.currentTimeMillis();
                         OhMyEmail.subject("风闻")
                                 .from("管理员")
                                 .to(TO_EMAIL)
                                 .text("电子书推荐")
                                 .send();
-                        System.out.println(new Date());
+                        long end = System.currentTimeMillis();
+                        System.out.println(end - start);
+                        //System.out.println(new Date());
                     } catch (SendMailException e) {
                         e.printStackTrace();
                     }
                 }
             }).start();
 
-        }
-        try {
-            Thread.sleep(300000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         Assert.assertTrue(true);
     }
