@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>这是一个神奇的修改页面</title>
+        <meta name="keywords" content="你猜猜看">
+        <meta name="description" content="这是一个利用非常神奇的手段制作的页面，你做好期待了吗">
+        <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+        <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/css/user/font-awesome.css}" rel="stylesheet">
+        <link th:href="@{/css/user/custom.css}" rel="stylesheet">
+        <link th:href="@{/css/user/animate.css}" rel="stylesheet">
+        <link th:href="@{/css/user/style.css}" rel="stylesheet">
+        <style>
+            body {
+                background: url("../img/login-background.jpg") no-repeat center fixed;
+            }
+        </style>
+        <script>
+            if(window.top !== window.self){
+                window.top.location = window.location;
+            }
+        </script>
+    </head>
+    <body class="gray-bg">
+        <div class="middle-box text-center animated fadeInDown" style="width: 1000px">
+            <div style="margin-top: 20%">
+                <h3 class="col-sm-offset-3 col-sm-9">欢迎加入知识就是财富</h3>
+                <p class="col-sm-offset-3 col-sm-9">成为新的用财富获取知识的人</p>
+                <form class="form-horizontal m-t" id="signupForm" th:action="@{/user/updatePassword}" method="post">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">用户名：</label>
+                        <div class="col-sm-9">
+                            <input id="username" name="username" class="form-control" type="text" aria-required="true" aria-invalid="true" placeholder="请输入您的用户名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">新密码：</label>
+                        <div class="col-sm-9">
+                            <input id="password" name="password" class="form-control" type="password" placeholder="请输入您新的密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电子邮箱：</label>
+                        <div class="col-sm-9">
+                            <input id="email" name="email" class="form-control" type="email" placeholder="请输入您的电子邮箱">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <button type="submit" class="btn btn-primary block full-width m-b">修 改</button>
+                        </div>
+                    </div>
+                    <p class="text-muted text-center col-sm-offset-3 col-sm-9"><small>放弃修改？</small><a th:href="@{/login}">点此登录</a></p>
+                </form>
+
+            </div>
+        </div>
+
+        <!-- 全局js -->
+        <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+        <!-- jQuery Validation plugin javascript-->
+        <script th:src="@{/js/user/jquery.validate.min.js}"></script>
+        <script th:src="@{/js/user/messages_zh.min.js}"></script>
+
+        <script th:src="@{/js/user/form-validate-demo2.js}"></script>
+    </body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>订单管理</title>
+        <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+        <link th:href="@{/css/order/admin.css}" rel="stylesheet">
+        <link th:href="@{/css/order/amazeui.css}" rel="stylesheet">
+        <link th:href="@{/css/order/personal.css}" rel="stylesheet">
+        <link th:href="@{/css/order/orstyle.css}" rel="stylesheet">
+        <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/css/order/bootstrap-table.min.css}" rel="stylesheet">
+    </head>
+    <body>
+        <!--标题 -->
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">订单管理</strong> / <small>Order</small></div>
+        </div>
+        <hr/>
+        <div class="am-tabs am-tabs-d2 am-margin" data-am-tabs>
+            <ul class="am-avg-sm-4 am-tabs-nav am-nav am-nav-tabs">
+                <li class="am-active"><a onclick="queryAll()">所有订单</a></li>
+                <li><a onclick="queryStatus0()">待付款</a></li>
+                <li><a onclick="queryStatus1()">待发货</a></li>
+                <li><a onclick="queryStatus2()">待评价</a></li>
+            </ul>
+            <div class="am-tabs-bd">
+                <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table id="orderListAll">
+                    </table>
+                </div>
+                <div class="am-tab-panel am-fade" id="tab2">
+                    <table id="orderList0">
+                    </table>
+                </div>
+                <div class="am-tab-panel am-fade" id="tab3">
+                    <table id="orderList1">
+                    </table>
+                </div>
+                <div class="am-tab-panel am-fade" id="tab4">
+                    <table id="orderList2">
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 全局js -->
+        <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+        <script th:src="@{/js/order/amazeui.js}"></script>
+        <script th:src="@{/js/order/bootstrap-table.min.js}"></script>
+        <script th:src="@{/js/order/bootstrap-table-zh-CN.min.js}"></script>
+
+        <script th:inline="javascript">
+            $(function () {
+                queryAll();
+            });
+            var all = '';
+            var status0 ='';
+            var status1 = '';
+            var status2 = '';
+            function queryAll() {
+                all=$('#orderListAll').bootstrapTable({
+                    url: '/order/queryAll',         //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    contentType : "application/x-www-form-urlencoded",
+                    queryParamsType:"undefined",
+                    queryParams: function (param) {
+                        var newparam = {
+                            pageNumber : param.pageNumber,
+                            pageSize : param.pageSize
+                        };
+                        return newparam;
+                    },//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 15, 20],        //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            field: 'id',
+                            title: '订单编号'
+                        }, {
+                            field: 'goodsName',
+                            title: '商品名'
+                        }, {
+                            field: 'goodsPrice',
+                            title: '商品单价'
+                        }, {
+                            field: 'goodsNum',
+                            title: '商品数量',
+                            formatter:function (value,row,index) {
+                                var delOne = "<button type='button' class='btn btn-danger' id='delOne'>-</button>";
+                                var addOne = "<button type='button' class='btn btn-primary' id='addOne'>+</button>";
+                                return delOne+value+addOne;
+                            },
+                            events:eventNum
+                        }, {
+                            field: 'time',
+                            title: '成交时间'
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            formatter:function (value,row,index) {
+                                if (value == 0){
+                                    return "待付款";
+                                }else if(value == 1) {
+                                    return "待确认";
+                                }else if(value == 2) {
+                                    return "待评价";
+                                }
+                            }
+                        }, {
+                            title: '总价',
+                            formatter:function (value,row,index) {
+                                return row.goodsPrice * row.goodsNum;
+                            }
+                        },
+                        {
+                            title: '操作',
+                            formatter: function (value,row,index) {
+                                var del="<button type='button' id='del' class='btn btn-danger' onclick=\"deleteOrder('"+ row.id +"')\" >删除</button>";
+                                if (row.status == 0){
+                                    var pay="<button type='button' class='btn btn-primary' id='pay'  onclick=\"pay('"+ row.id +"')\">付款</button>";
+                                    return pay+del;
+                                }else if (row.status == 1){
+                                    var info="<button type='button' class='btn btn-primary' id='info'  onclick=\"info('"+ row.id +"')\">详情</button>";
+                                    return info+del;
+                                }else if (row.status == 2){
+                                    var pinglun="<button type='button' class='btn btn-primary' id='pinglun'  onclick=\"pinglun('"+ row.id +"')\">去评价</button>";
+                                    return pinglun+del;
+                                }
+                            } //自定义方法，添加操作按钮
+                        }
+                    ],
+                    rowStyle: function (row, index) {
+                        var classesArr = ['success', 'info'];
+                        var strclass = "";
+                        if (index % 2 === 0) {//偶数行
+                            strclass = classesArr[0];
+                        } else {//奇数行
+                            strclass = classesArr[1];
+                        }
+                        return {classes: strclass};
+                    }//隔行变色
+                });
+            }
+            function queryStatus0() {
+                status0=$('#orderList0').bootstrapTable({
+                    url: '/order/queryAll',         //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    contentType : "application/x-www-form-urlencoded",
+                    queryParamsType:"undefined",
+                    queryParams: function (param) {
+                        var newparam = {
+                            pageNumber : param.pageNumber,
+                            pageSize : param.pageSize,
+                            status : 0
+                        };
+                        return newparam;
+                    },//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 15, 20],        //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            field: 'id',
+                            title: '订单编号'
+                        }, {
+                            field: 'goodsName',
+                            title: '商品名'
+                        }, {
+                            field: 'goodsPrice',
+                            title: '商品单价'
+                        }, {
+                            field: 'goodsNum',
+                            title: '商品数量',
+                            formatter:function (value,row,index) {
+                                var delOne = "<button type='button' class='btn btn-danger' id='delOne'>-</button>";
+                                var addOne = "<button type='button' class='btn btn-primary' id='addOne'>+</button>";
+                                return delOne+value+addOne;
+                            },
+                            events:eventNum
+                        }, {
+                            field: 'time',
+                            title: '成交时间'
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            formatter:function (value,row,index) {
+                                if (value == 0){
+                                    return "待付款";
+                                }else if(value == 1) {
+                                    return "待确认";
+                                }else if(value == 2) {
+                                    return "待评价";
+                                }
+                            }
+                        },
+                        {
+                            title: '操作',
+                            formatter: function (value,row,index) {
+                                var del="<button type='button' id='del' class='btn btn-danger' onclick=\"deleteOrder('"+ row.id +"')\" >删除</button>";
+                                if (row.status == 0){
+                                    var pay="<button type='button' class='btn btn-primary' id='pay'  onclick=\"pay('"+ row.id +"')\">付款</button>";
+                                    return pay+del;
+                                }else if (row.status == 1){
+                                    var info="<button type='button' class='btn btn-primary' id='info'  onclick=\"info('"+ row.id +"')\">详情</button>";
+                                    return info+del;
+                                }else if (row.status == 2){
+                                    var pinglun="<button type='button' class='btn btn-primary' id='pinglun'  onclick=\"pinglun('"+ row.id +"')\">去评价</button>";
+                                    return pinglun+del;
+                                }
+                            } //自定义方法，添加操作按钮
+                        }
+                    ],
+                    rowStyle: function (row, index) {
+                        var classesArr = ['success', 'info'];
+                        var strclass = "";
+                        if (index % 2 === 0) {//偶数行
+                            strclass = classesArr[0];
+                        } else {//奇数行
+                            strclass = classesArr[1];
+                        }
+                        return {classes: strclass};
+                    }//隔行变色
+                });
+            }
+
+            function queryStatus1() {
+                status1=$('#orderList1').bootstrapTable({
+                    url: '/order/queryAll',         //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    contentType : "application/x-www-form-urlencoded",
+                    queryParamsType:"undefined",
+                    queryParams: function (param) {
+                        var newparam = {
+                            pageNumber : param.pageNumber,
+                            pageSize : param.pageSize,
+                            status : 1
+                        };
+                        return newparam;
+                    },//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 15, 20],        //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            field: 'id',
+                            title: '订单编号'
+                        }, {
+                            field: 'goodsName',
+                            title: '商品名'
+                        }, {
+                            field: 'goodsPrice',
+                            title: '商品单价'
+                        }, {
+                            field: 'goodsNum',
+                            title: '商品数量',
+                            formatter:function (value,row,index) {
+                                var delOne = "<button type='button' class='btn btn-danger' id='delOne'>-</button>";
+                                var addOne = "<button type='button' class='btn btn-primary' id='addOne'>+</button>";
+                                return delOne+value+addOne;
+                            },
+                            events:eventNum
+                        }, {
+                            field: 'time',
+                            title: '成交时间'
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            formatter:function (value,row,index) {
+                                if (value == 0){
+                                    return "待付款";
+                                }else if(value == 1) {
+                                    return "待确认";
+                                }else if(value == 2) {
+                                    return "待评价";
+                                }
+                            }
+                        },
+                        {
+                            title: '操作',
+                            formatter: function (value,row,index) {
+                                var del="<button type='button' id='del' class='btn btn-danger' onclick=\"deleteOrder('"+ row.id +"')\" >删除</button>";
+                                if (row.status == 0){
+                                    var pay="<button type='button' class='btn btn-primary' id='pay'  onclick=\"pay('"+ row.id +"')\">付款</button>";
+                                    return pay+del;
+                                }else if (row.status == 1){
+                                    var info="<button type='button' class='btn btn-primary' id='info'  onclick=\"info('"+ row.id +"')\">详情</button>";
+                                    return info+del;
+                                }else if (row.status == 2){
+                                    var pinglun="<button type='button' class='btn btn-primary' id='pinglun'  onclick=\"pinglun('"+ row.id +"')\">去评价</button>";
+                                    return pinglun+del;
+                                }
+                            } //自定义方法，添加操作按钮
+                        }
+                    ],
+                    rowStyle: function (row, index) {
+                        var classesArr = ['success', 'info'];
+                        var strclass = "";
+                        if (index % 2 === 0) {//偶数行
+                            strclass = classesArr[0];
+                        } else {//奇数行
+                            strclass = classesArr[1];
+                        }
+                        return {classes: strclass};
+                    }//隔行变色
+                });
+            }
+
+            function queryStatus2() {
+                status2=$('#orderList2').bootstrapTable({
+                    url: '/order/queryAll',         //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    contentType : "application/x-www-form-urlencoded",
+                    queryParamsType:"undefined",
+                    queryParams: function (param) {
+                        var newparam = {
+                            pageNumber : param.pageNumber,
+                            pageSize : param.pageSize,
+                            status : 2
+                        };
+                        return newparam;
+                    },//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 15, 20],        //可供选择的每页的行数（*）
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+                    columns: [
+                        {
+                            field: 'id',
+                            title: '订单编号'
+                        }, {
+                            field: 'goodsName',
+                            title: '商品名'
+                        }, {
+                            field: 'goodsPrice',
+                            title: '商品单价'
+                        }, {
+                            field: 'goodsNum',
+                            title: '商品数量',
+                            formatter:function (value,row,index) {
+                                var delOne = "<button type='button' class='btn btn-danger' id='delOne'>-</button>";
+                                var addOne = "<button type='button' class='btn btn-primary' id='addOne'>+</button>";
+                                return delOne+value+addOne;
+                            },
+                            events:eventNum
+                        }, {
+                            field: 'time',
+                            title: '成交时间'
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            formatter:function (value,row,index) {
+                                if (value == 0){
+                                    return "待付款";
+                                }else if(value == 1) {
+                                    return "待确认";
+                                }else if(value == 2) {
+                                    return "待评价";
+                                }
+                            }
+                        },
+                        {
+                            title: '操作',
+                            formatter: function (value,row,index) {
+                                var del="<button type='button' id='del' class='btn btn-danger' onclick=\"deleteOrder('"+ row.id +"')\" >删除</button>";
+                                if (row.status == 0){
+                                    var pay="<button type='button' class='btn btn-primary' id='pay'  onclick=\"pay('"+ row.id +"')\">付款</button>";
+                                    return pay+del;
+                                }else if (row.status == 1){
+                                    var info="<button type='button' class='btn btn-primary' id='info'  onclick=\"info('"+ row.id +"')\">详情</button>";
+                                    return info+del;
+                                }else if (row.status == 2){
+                                    var pinglun="<button type='button' class='btn btn-primary' id='pinglun'  onclick=\"pinglun('"+ row.id +"')\">去评价</button>";
+                                    return pinglun+del;
+                                }
+                            } //自定义方法，添加操作按钮
+                        }
+                    ],
+                    rowStyle: function (row, index) {
+                        var classesArr = ['success', 'info'];
+                        var strclass = "";
+                        if (index % 2 === 0) {//偶数行
+                            strclass = classesArr[0];
+                        } else {//奇数行
+                            strclass = classesArr[1];
+                        }
+                        return {classes: strclass};
+                    }//隔行变色
+                });
+            }
+
+            window.eventNum={
+                "click #delOne":function (event,value,row) {
+                    if (value > 1) {
+                        $.ajax({
+                            url: "/order/deleteOne",
+                            type: "post",
+                            data: {
+                                id: row.id,
+                                goodsNumber: value
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                all.bootstrapTable('refresh');
+                                status0.bootstrapTable('refresh');
+                                status1.bootstrapTable('refresh');
+                                status2.bootstrapTable('refresh');
+                            }
+                        });
+                    }else{
+                        alert("数量为1，不能再减少");
+                    }
+                },
+                "click #addOne":function (event,value,row) {
+                    $.ajax({
+                        url: "/order/addOne",
+                        type: "post",
+                        data: {
+                            id: row.id
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            all.bootstrapTable('refresh');
+                            status0.bootstrapTable('refresh');
+                            status1.bootstrapTable('refresh');
+                            status2.bootstrapTable('refresh');
+                        }
+                    });
+                }
+            };
+
+            function deleteOrder(id) {
+                if (confirm("您确定要删除吗!")){
+                    $.ajax({
+                        url: "/order/deleteOrder",
+                        type: "post",
+                        data: {
+                            id: id
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            all.bootstrapTable('refresh');
+                            status0.bootstrapTable('refresh');
+                            status1.bootstrapTable('refresh');
+                            status2.bootstrapTable('refresh');
+                        }
+                    });
+                }
+            }
+
+        </script>
+    </body>
+</html>

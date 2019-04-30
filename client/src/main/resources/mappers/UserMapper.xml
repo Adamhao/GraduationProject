@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.qdu.mapper.UserMapper">
+  <sql id="user-columns">
+    id,username,password,email,phone,status,activation_code
+  </sql>
+  <insert id="insert" parameterType="cn.edu.qdu.domin.User">
+    insert into user(<include refid="user-columns"></include>) values (null,#{username},#{password},#{email},#{phone},#{status},#{activation_code});
+  </insert>
+  <select id="queryByUsername" parameterType="string" resultType="cn.edu.qdu.domin.User">
+    select <include refid="user-columns"></include> from user where username = #{username}
+  </select>
+  <update id="updateStatusById" parameterType="int">
+    update user set status = 1 where id = #{id}
+  </update>
+  <update id="updatePassword" parameterType="map">
+    update user set password = #{password} where username = #{username}
+  </update>
+  <update id="updateActivation_code" parameterType="map">
+    update user set activation_code = #{activation_code}, status = 0 where username = #{username}
+  </update>
+</mapper>

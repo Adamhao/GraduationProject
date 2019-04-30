@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.qdu.mapper.OrderMapper">
+  <sql id="order-columns">
+    id,user_id,goods_id,goods_name,goods_price,goods_number,time,status
+  </sql>
+  <resultMap id="order-Map" type="cn.edu.qdu.domin.Order">
+    <result column="id" property="id"></result>
+    <result column="user_id" property="userId"></result>
+    <result column="goods_id" property="goodsId"></result>
+    <result column="goods_name" property="goodsName"></result>
+    <result column="goods_price" property="goodsPrice"></result>
+    <result column="goods_number" property="goodsNum"></result>
+    <result column="time" property="time"></result>
+    <result column="status" property="status"></result>
+  </resultMap>
+
+  <select id="queryAll" parameterType="int" resultMap="order-Map">
+    select <include refid="order-columns"></include> from orders
+    <where>
+      <if test="userId != null">
+        user_id = #{userId}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+  </select>
+
+  <update id="updateGoodsNumDel" parameterType="int">
+    update orders set goods_number = goods_number - 1 where id = #{id}
+  </update>
+
+  <update id="updateGoodsNumAdd" parameterType="int">
+    update orders set goods_number = goods_number + 1 where id = #{id}
+  </update>
+
+  <delete id="deleteOne" parameterType="int">
+    delete from orders where id = #{id}
+  </delete>
+</mapper>

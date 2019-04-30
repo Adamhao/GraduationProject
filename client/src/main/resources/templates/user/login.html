@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <title>知识就是财富</title>
+        <link rel="shortcut icon" th:href="@{/img/favicon.ico}">
+        <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/css/user/font-awesome.css}" rel="stylesheet">
+        <link th:href="@{/css/user/animate.css}" rel="stylesheet">
+        <link th:href="@{/css/user/style.css}" rel="stylesheet">
+        <link th:href="@{/css/user/login.css}" rel="stylesheet">
+        <!--[if lt IE 9]>
+        <meta http-equiv="refresh" content="0;ie.html" />
+        <![endif]-->
+        <script>
+            if (window.top !== window.self) {
+                window.top.location = window.location;
+            }
+        </script>
+    </head>
+    <body class="signin">
+        <div class="signinpanel">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="signin-info">
+                        <div class="logopanel m-b">
+                            <h1>知识就是财富</h1>
+                        </div>
+                        <div class="m-b"></div>
+                        <h4>欢迎使用 <strong>知识就是财富</strong>电商系统</h4>
+                        <strong>还没有加入？ <a th:href="@{/register}">立即成为我们的一员吧</a></strong>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <form method="post" th:action="@{/user/login}">
+                        <h4 class="no-margins">请登录：</h4>
+                        <p class="m-t-md">进入知识就是财富</p>
+                        <p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+                        <input type="text" class="form-control uname" placeholder="用户名" name="username" required="required"/>
+                        <input type="password" class="form-control pword m-b" placeholder="密码" name="password" required="required"/>
+                        <button type="submit" class="btn btn-success btn-block">登录</button>
+                        <div class="form-inline" style="margin-top: 5px">
+                            <a type="button" style="float: left" th:href="@{/index}">游客登录</a>
+                            <a type="button" style="float: right" th:href="@{/updatePassword}">忘记密码</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="signup-footer">
+                <div class="pull-left">
+                    月入百万不是梦，心动不如快行动！
+                </div>
+            </div>
+        </div>
+
+        <!-- 全局js -->
+        <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+        <!-- jQuery Validation plugin javascript-->
+        <script th:src="@{/js/user/jquery.validate.min.js}"></script>
+        <script th:src="@{/js/user/messages_zh.min.js}"></script>
+
+        <script th:src="@{/js/user/form-validate-demo.js}"></script>
+        <script th:inline="javascript">
+            $(function () {
+                var status = [[${status}]];
+                if (status != null){
+                    alert(status);
+                }
+            });
+        </script>
+    </body>
+</html>
