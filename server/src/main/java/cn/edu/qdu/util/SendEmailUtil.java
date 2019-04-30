@@ -3,10 +3,7 @@ package cn.edu.qdu.util;
 import cn.edu.qdu.email.OhMyEmail;
 
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 发送邮件的工具类
@@ -31,7 +28,7 @@ public class SendEmailUtil {
     //初始化变量
     static {
         blackList = new HashSet<>();
-        sendTimesMap = new HashMap<>();
+        sendTimesMap = new ConcurrentHashMap<>();
         senderList = new ArrayList<>();
         //waitingQueue = new ArrayBlockingQueue<EmailTask>(3000);
         //创建线程池
