@@ -15,18 +15,18 @@ import java.util.*;
  */
 public class OhMyEmail {
 
-    private static Session session;
-    private static String user;
+    private Session session;
+    private String user;
 
     private MimeMessage msg;
     private String text;
     private String html;
     private List<MimeBodyPart> attachments = new ArrayList<MimeBodyPart>();
 
-    private OhMyEmail() {
+    public OhMyEmail() {
     }
 
-    public static Properties defaultConfig(Boolean debug) {
+    public Properties defaultConfig(Boolean debug) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.ssl.enable", "true");
@@ -43,7 +43,7 @@ public class OhMyEmail {
      * @param debug
      * @return
      */
-    public static Properties SMTP_ENT_QQ(boolean debug) {
+    public Properties SMTP_ENT_QQ(boolean debug) {
         Properties props = defaultConfig(debug);
         props.put("mail.smtp.host", "smtp.exmail.qq.com");
         return props;
@@ -55,7 +55,7 @@ public class OhMyEmail {
      * @param debug enable debug
      * @return
      */
-    public static Properties SMTP_QQ(boolean debug) {
+    public Properties SMTP_QQ(boolean debug) {
         Properties props = defaultConfig(debug);
         props.put("mail.smtp.host", "smtp.qq.com");
         return props;
@@ -67,7 +67,7 @@ public class OhMyEmail {
      * @param debug enable debug
      * @return
      */
-    public static Properties SMTP_163(Boolean debug) {
+    public Properties SMTP_163(Boolean debug) {
         Properties props = defaultConfig(debug);
         props.put("mail.smtp.host", "smtp.163.com");
         return props;
@@ -80,13 +80,13 @@ public class OhMyEmail {
      * @param username email auth username
      * @param password email auth password
      */
-    public static void config(Properties props, final String username, final String password) {
+    public void config(Properties props, final String username, final String password) {
         props.setProperty("username", username);
         props.setProperty("password", password);
         config(props);
     }
 
-    public static void config(Properties props) {
+    public void config(Properties props) {
         final String username = props.getProperty("username");
         final String password = props.getProperty("password");
         user = username;
@@ -103,15 +103,14 @@ public class OhMyEmail {
      *
      * @param subject subject title
      */
-    public static OhMyEmail subject(String subject) throws SendMailException {
-        OhMyEmail ohMyEmail = new OhMyEmail();
-        ohMyEmail.msg = new MimeMessage(session);
+    public OhMyEmail subject(String subject) throws SendMailException {
+        this.msg = new MimeMessage(session);
         try {
-            ohMyEmail.msg.setSubject(subject, "UTF-8");
+            this.msg.setSubject(subject, "UTF-8");
         } catch (Exception e) {
             throw new SendMailException(e);
         }
-        return ohMyEmail;
+        return this;
     }
 
     /**

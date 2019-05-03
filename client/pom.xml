@@ -103,6 +103,18 @@
 			<version>1.2.3</version>
 		</dependency>
 
+        <dependency>
+            <groupId>cn.edu.qdu</groupId>
+            <artifactId>server</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.arronlong</groupId>
+            <artifactId>httpclientutil</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
     </dependencies>
 
 	<build>
