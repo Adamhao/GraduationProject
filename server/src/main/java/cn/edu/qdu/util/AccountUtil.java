@@ -49,12 +49,4 @@ public class AccountUtil {
         return right.equals(MD5Util.MD5Encode(input));
     }
 
-    public static void main(String[] args) {
-
-        String right = MD5Util.MD5Encode("123456");
-        String input = "123456";
-        System.out.println(isPasswordRight(right,null));
-
-    }
-
 }
