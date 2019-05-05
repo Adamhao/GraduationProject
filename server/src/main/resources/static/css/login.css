@@ -133,3 +133,10 @@ body, html {
 .forgot-password:focus {
     color: rgb(12, 97, 33);
 }
+
+.alert {
+    position:absolute;
+    bottom:0px;
+    right:20px;
+    width:fit-content;
+}

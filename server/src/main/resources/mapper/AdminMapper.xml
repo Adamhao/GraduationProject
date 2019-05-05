@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.qdu.mapper.AdminMapper">
+
+    <select id="login" parameterType="admin" resultType="admin">
+        select * from administrators where email = #{admin.email} and `password` = #{admin.password}
+    </select>
+
+    <select id="getPasswordByEmail" parameterType="string" resultType="string">
+        select `password` from administrators where email = #{email}
+    </select>
+
+    <update id="changePassword" parameterType="map">
+        update administrators set `password` = #{password} where email = #{email}
+    </update>
+
+</mapper>

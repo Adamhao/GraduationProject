@@ -9,6 +9,7 @@ public class Admin {
     private String username;
     private String email;
     private String password;
+    private Integer state;
 
     public String getUsername() {
         return username;
@@ -32,5 +33,13 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

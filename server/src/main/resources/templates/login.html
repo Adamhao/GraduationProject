@@ -29,6 +29,11 @@
             忘记密码?
         </a>
     </div><!-- /card-container -->
+
+    <div class="alert alert-warning alert-dismissible" role="alert" th:if="${result != null}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>警告!</strong> [[${result}]]
+    </div>
 </div><!-- /container -->
 </body>
 </html>
