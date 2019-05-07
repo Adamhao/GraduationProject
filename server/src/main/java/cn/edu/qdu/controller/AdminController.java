@@ -33,7 +33,11 @@ public class AdminController {
     }
 
     @GetMapping("/index")
-    public String toIndexPage() {
+    public String toIndexPage(HttpSession session,Model model) {
+        if(session.getAttribute("user") == null) {
+            model.addAttribute("result","你没有权限访问该页面，登陆后重试!");
+            return "login";
+        }
         return "index";
     }
 
@@ -53,18 +57,38 @@ public class AdminController {
         return "redirect:index";
     }
 
-    @GetMapping("/changePassword")
-    @ResponseBody
-    public String changPass(String oldPass, String newPass, String confirmPass, HttpSession session) {
+    @GetMapping("/toChangePasswordPage")
+    public String toChangePasswordPage(HttpSession session,Model model) {
         Admin temp = (Admin) session.getAttribute("user");
-        adminService.changePassword(temp.getEmail(),oldPass,newPass,confirmPass);
-        return "密码修改成功";
+        if(temp == null || temp.getEmail() == null) {
+            model.addAttribute("result","你没有权限访问!");
+            return "login";
+        }
+        return "change_password";
+    }
+
+    @PostMapping("/changePassword")
+    public String changPass(String oldPass, String newPass, String confirmPass, HttpSession session,Model model) {
+        Admin temp = (Admin) session.getAttribute("user");
+        if(temp == null || temp.getEmail() == null) {
+            model.addAttribute("result","你没有权限修改密码,重新登录后再试!");
+            return "login";
+        }
+        try {
+            adminService.changePassword(temp.getEmail(),oldPass,newPass,confirmPass);
+            model.addAttribute("result","密码修改成功");
+            return "login";
+        } catch(Exception e) {
+            model.addAttribute("result",e.getMessage());
+            //返回修改密码页面，提示修改失败信息
+            return "";
+        }
     }
 
     @GetMapping("/quit")
     public String loginOut(HttpSession session) {
         session.invalidate();
-        return "redirect:login";
+        return "redirect:/admin/";
     }
 
 }
