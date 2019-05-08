@@ -39,9 +39,11 @@ public class AdminServiceImpl implements AdminService{
         if(oldPassword == null || "".equals(oldPassword.trim())) {
             throw new PasswordFormatWrongException("输入老密码");
         }
-        if(newPassword == null || "".equals(newPassword.trim())
-                || confirmPassword == null || "".equals(confirmPassword.trim())) {
+        if(newPassword == null || "".equals(newPassword.trim())) {
             throw new PasswordFormatWrongException("输入新密码");
+        }
+        if(confirmPassword == null || "".equals(confirmPassword.trim())) {
+            throw new PasswordFormatWrongException("输入确认密码");
         }
 
         if(!confirmPassword.equals(newPassword)) {
@@ -55,11 +57,11 @@ public class AdminServiceImpl implements AdminService{
         AccountUtil.isRightPasswordFormat(confirmPassword);
 
         String password = adminMapper.getPasswordByEmail(email);
-        if(!AccountUtil.isPasswordRight(password,confirmPassword)) {
+        if(!AccountUtil.isPasswordRight(password,oldPassword)) {
             throw new PasswordNotCorrectException("旧密码有误");
         }
 
-        adminMapper.changePassword(email,confirmPassword);
+        adminMapper.changePassword(email,MD5Util.MD5Encode(confirmPassword));
 
     }
 }

@@ -17,7 +17,7 @@
         <p id="profile-name" class="profile-name-card"></p>
         <form action = "login" class="form-signin" method="post">
             <span id="reauth-email" class="reauth-email"></span>
-            <input type="email" id="inputEmail" name = "email" class="form-control" placeholder="邮箱" required autofocus>
+            <input type="email" id="inputEmail" name = "email" class="form-control" placeholder="邮箱" th:value="${login_email}" required autofocus>
             <input type="password" id="inputPassword" name = "password" class="form-control" placeholder="密码" required>
             <!--<div id="remember" class="checkbox">
                 <label>
@@ -33,7 +33,7 @@
 
     <div class="alert alert-warning alert-dismissible" role="alert" th:if="${result != null}">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>警告!</strong> [[${result}]]
+        <strong>提示!</strong> [[${result}]]
     </div>
 </div><!-- /container -->
 </body>

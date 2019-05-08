@@ -44,10 +44,12 @@ public class AdminController {
     @PostMapping("/login")
     public String index(Model model, Admin admin, HttpServletRequest request) {
         Admin temp = adminService.login(admin);
+        model.addAttribute("login_email",admin.getEmail());
         if(temp == null) {
             model.addAttribute("result","用户名或密码有误!");
             return "login";
         }
+
         if(temp.getState() == null || temp.getState() < 0) {
             model.addAttribute("result","状态异常，联系Adam解决!");
             return "login";
@@ -80,8 +82,11 @@ public class AdminController {
             return "login";
         } catch(Exception e) {
             model.addAttribute("result",e.getMessage());
+            model.addAttribute("oldPass",oldPass);
+            model.addAttribute("newPass",newPass);
+            model.addAttribute("confirmPass",confirmPass);
             //返回修改密码页面，提示修改失败信息
-            return "";
+            return "change_password";
         }
     }
 
