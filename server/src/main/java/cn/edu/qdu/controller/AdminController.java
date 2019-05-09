@@ -27,17 +27,13 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @GetMapping("/")
+    @RequestMapping("/")
     public String toLoginPage() {
         return "login";
     }
 
     @GetMapping("/index")
-    public String toIndexPage(HttpSession session,Model model) {
-        if(session.getAttribute("user") == null) {
-            model.addAttribute("result","你没有权限访问该页面，登陆后重试!");
-            return "login";
-        }
+    public String toIndexPage() {
         return "index";
     }
 
@@ -72,10 +68,6 @@ public class AdminController {
     @PostMapping("/changePassword")
     public String changPass(String oldPass, String newPass, String confirmPass, HttpSession session,Model model) {
         Admin temp = (Admin) session.getAttribute("user");
-        if(temp == null || temp.getEmail() == null) {
-            model.addAttribute("result","你没有权限修改密码,重新登录后再试!");
-            return "login";
-        }
         try {
             adminService.changePassword(temp.getEmail(),oldPass,newPass,confirmPass);
             model.addAttribute("result","密码修改成功");
