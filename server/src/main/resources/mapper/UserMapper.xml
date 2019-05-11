@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.qdu.mapper.UserMapper">
+
+    <select id="queryAll" resultType="user" parameterType="string">
+        ${statement}
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_user
+    </select>
+
+    <update id="disabledUsers" parameterType="list">
+        update t_user set state = -1 where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="update" parameterType="user">
+        update t_user set state = #{user.state},note = #{user.note} where id = #{user.id}
+    </update>
+
+</mapper>
