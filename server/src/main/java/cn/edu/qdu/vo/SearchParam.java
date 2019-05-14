@@ -5,7 +5,7 @@ package cn.edu.qdu.vo;
  */
 public class SearchParam {
 
-    private boolean _search;
+    private boolean search;
     private int rows = 10;//每页显示条数
     private int page = 1;//当前页
     private String sidx;
@@ -15,12 +15,12 @@ public class SearchParam {
     private String searchOper;
     private String filters;
 
-    public boolean is_search() {
-        return _search;
+    public boolean isSearch() {
+        return search;
     }
 
-    public void set_search(boolean _search) {
-        this._search = _search;
+    public void setSearch(boolean search) {
+        this.search = search;
     }
 
     public int getRows() {

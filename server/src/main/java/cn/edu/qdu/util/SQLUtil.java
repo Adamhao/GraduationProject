@@ -10,7 +10,7 @@ public class SQLUtil {
     public static String getFormatStatement(String tableName, SearchParam param) {
         StringBuffer sb = new StringBuffer("select * from ");
         sb.append(tableName);
-        if(param.is_search() == false) {
+        if(param.isSearch() == false) {
             /*sidx: username
             sord: asc*/
             sb.append(" order by ").append(param.getSidx()).append(" ").append(param.getSord());

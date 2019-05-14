@@ -170,7 +170,7 @@ jQuery(function ($) {
         iconSet: "fontAwesome",
         viewrecords: true,
         //默认每页显示条数
-        rowNum: 1,
+        rowNum: 2,
         //选择每页显示多少条
         rowList: [1, 2, 3],
         pager: pager_selector,

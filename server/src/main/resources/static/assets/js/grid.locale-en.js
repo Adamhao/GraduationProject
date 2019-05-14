@@ -27,23 +27,15 @@
             caption: "查找...",
             Find: "搜索",
             Reset: "重置",
-            odata: [{oper: "eq", text: "equal"}, {oper: "ne", text: "not equal"}, {
+            odata: [{oper: "eq", text: "等于"}, {oper: "ne", text: "不等于"}, {
                 oper: "lt",
-                text: "less"
-            }, {oper: "le", text: "less or equal"}, {oper: "gt", text: "greater"}, {
+                text: "小于"
+            }, {oper: "le", text: "小于或等于"}, {oper: "gt", text: "大于"}, {
                 oper: "ge",
-                text: "greater or equal"
-            }, {oper: "bw", text: "begins with"}, {oper: "bn", text: "does not begin with"}, {
-                oper: "in",
-                text: "is in"
-            }, {oper: "ni", text: "is not in"}, {oper: "ew", text: "ends with"}, {
-                oper: "en",
-                text: "does not end with"
-            }, {oper: "cn", text: "contains"}, {oper: "nc", text: "does not contain"}, {
-                oper: "nu",
-                text: "is null"
-            }, {oper: "nn", text: "is not null"}],
-            groupOps: [{op: "AND", text: "all"}, {op: "OR", text: "any"}],
+                text: "大于或等于"
+            }, {oper: "bw", text: "以...开始"},
+                {oper: "ew", text: "以...结束"}],
+            groupOps: [{op: "AND", text: "所有"}, {op: "OR", text: "任一"}],
             operandTitle: "Click to select search operation.",
             resetTitle: "重置搜索值"
         },

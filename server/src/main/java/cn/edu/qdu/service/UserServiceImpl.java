@@ -3,6 +3,7 @@ package cn.edu.qdu.service;
 import cn.edu.qdu.mapper.UserMapper;
 import cn.edu.qdu.model.User;
 import cn.edu.qdu.util.SQLUtil;
+import cn.edu.qdu.util.SearchMapping;
 import cn.edu.qdu.util.StringUtil;
 import cn.edu.qdu.vo.SearchParam;
 import cn.edu.qdu.vo.UserUpdateParam;
@@ -26,11 +27,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Map<String, Object> queryAll(SearchParam param) {
-        String sql = SQLUtil.getFormatStatement("t_user",param);
+        //String sql = SQLUtil.getFormatStatement("t_user",param);
+        String sql = SearchMapping.getFormatStatement("t_user",param);
         PageHelper.startPage(param.getPage(),param.getRows());
         List<User> data = userMapper.queryAll(sql);
-        int count = userMapper.count();
+        //int count = userMapper.count();
         PageInfo<User> pi = new PageInfo<>(data);
+        int count = (int)pi.getTotal();
         Map<String,Object> result = new HashMap<>();
         result.put("rows",data);
         result.put("total",(count % param.getRows()) == 0 ? count / param.getRows() : count / param.getRows()+1);//总页数
