@@ -1,5 +1,7 @@
 package cn.edu.qdu.mapper;
 
+import cn.edu.qdu.echarts.line.LineData;
+import cn.edu.qdu.echarts.line.LineItem;
 import cn.edu.qdu.model.Admin;
 import cn.edu.qdu.model.User;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +23,5 @@ public interface UserMapper {
 
     void update(@Param("user") User user);
 
+    List<LineItem> queryEveryDayIncreasedUserNum();
 }

@@ -54,7 +54,12 @@ public class SearchMapping {
             return "";
         }
         String result = dbOperatorMapping.get(rule.getOp());
-        return rule.getField() + result.replace("{}", getFormatStateValue(rule.getData()));
+        if(result.contains("%")) {
+            result = rule.getField() + result.replace("{}", getFormatStateValue(rule.getData()).replace("'",""));
+        } else {
+            result = rule.getField() + result.replace("{}", getFormatStateValue(rule.getData()));
+        }
+        return result;
     }
 
     private static String getFormatStateValue(String value) {
@@ -64,14 +69,24 @@ public class SearchMapping {
             return "1";
         } else if ("未激活".equals(value)) {
             return "0";
+        } else if("下架".equals(value)) {
+            return "-1";
+        } else if("上架".equals(value)) {
+            return "0";
         } else {
-            return value;
+            return "'" + value + "'";
         }
     }
 
     public static String getFormatStatement(String tableName, SearchParam searchParam) {
-        StringBuffer sb = new StringBuffer("select * from ");
-        sb.append(tableName);
+        StringBuffer sb = new StringBuffer();
+        if("t_user".equals(tableName)) {
+            sb.append("select * from ").append(tableName);
+        } else if("t_product".equals(tableName)) {
+            sb.append("select tpt.id,tpt.createTime,tpt.model,tpt.note,tpt.point,tpt.stock,tpt.title,tpt.inputUser_id,tu.username,tpt.masterPic_id,tp.url as p_url,tpt.url,tpt.state from t_product tpt\n" +
+                    "            left join t_user tu on tpt.inputUser_id = tu.id left join t_picture tp on tp.id = tpt.masterPic_id ");
+        }
+
         if (searchParam.isSearch() == true) {
             FilterParam param = JsonUtil.toObject(searchParam.getFilters(), new TypeReference<FilterParam>() {});
             boolean isFirst = true;
@@ -80,6 +95,16 @@ public class SearchMapping {
                     if (isFirst) {
                         isFirst = false;
                         sb.append(" where ");
+                    }
+                    if("t_product".equals(tableName)) {
+                        switch (rule.getField()){
+                            case "username" :
+                                sb.append("tu.");
+                                break;
+                            default :
+                                sb.append("tpt.");
+                                break;
+                        }
                     }
                     sb.append(getOperator(rule)).append(param.getGroupOp()).append(" ");
                 }

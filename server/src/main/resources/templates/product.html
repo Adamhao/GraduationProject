@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>主页 - 后台管理系统</title>
+    <title>商品管理 - 后台管理系统</title>
 
     <meta name="description" content="overview &amp; stats"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -16,12 +16,16 @@
         }
         /*]]>*/
     </script>
+
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/assets/font-awesome/4.5.0/css/font-awesome.min.css}"/>
 
     <!-- page specific plugin styles -->
-
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" th:href="@{/assets/css/jquery-ui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap-datepicker3.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/ui.jqgrid.min.css}"/>
     <!-- text fonts -->
     <link rel="stylesheet" th:href="@{/assets/css/fonts.googleapis.com.css}"/>
 
@@ -194,7 +198,7 @@
 
                 <li class="light-blue dropdown-modal">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo" th:src="@{/assets/images/avatars/user.jpg}" alt="Adam's Photo"/>
+                        <img class="nav-user-photo" th:src="@{/assets/images/avatars/user.jpg}" alt="Jason's Photo"/>
                         <span class="user-info">
 									<small>欢迎你,</small>
 									[[${session.user == null ? '' : session.user.username}]]
@@ -237,7 +241,7 @@
         </script>
 
         <ul class="nav nav-list">
-            <li class="active">
+            <li class="">
                 <a href="/admin/index">
                     <i class="menu-icon fa fa-tachometer"></i>
                     <span class="menu-text"> 图表 </span>
@@ -247,7 +251,7 @@
             </li>
 
             <li class="">
-                <a href="/user/" class="dropdown-toggle">
+                <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-user"></i>
                     <span class="menu-text"> 用户 </span>
                     <b class="arrow fa fa-angle-down"></b>
@@ -255,7 +259,7 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="">
+                    <li class="active">
                         <a href="/user/">
                             <i class="menu-icon fa fa-caret-right"></i>
                             用户管理
@@ -266,7 +270,7 @@
                 </ul>
             </li>
 
-            <li class="">
+            <li class="active open">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-tag"></i>
                     <span class="menu-text"> 商品 </span>
@@ -276,18 +280,19 @@
 
                 <ul class="submenu">
                     <li class="">
-                        <a href="javascript:alert('暂时不允许发布商品')">
+                        <a href="javascript:alert('暂时不允许发布商品');">
                             <i class="menu-icon fa fa-caret-right"></i>
                             发布商品
                         </a>
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="active">
                         <a href="/product/">
                             <i class="menu-icon fa fa-caret-right"></i>
                             商品管理
                         </a>
+
                         <b class="arrow"></b>
                     </li>
                 </ul>
@@ -297,7 +302,6 @@
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-cog"></i>
                     <span class="menu-text"> 设置 </span>
-
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
 
@@ -328,9 +332,12 @@
                 <ul class="breadcrumb">
                     <li>
                         <i class="ace-icon fa fa-home home-icon"></i>
-                        <a href="/admin/">主页</a>
+                        <a href="/admin/index">主页</a>
                     </li>
-                    <li class="active">图表</li>
+                    <li>
+                        <a href="javascript:void(0);">用户</a>
+                    </li>
+                    <li class="active">用户管理</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -409,39 +416,23 @@
                     </div><!-- /.ace-settings-box -->
                 </div><!-- /.ace-settings-container -->
 
-                <div class="page-header">
-                    <h1>
-                        图表
-                        <small>
-                            <i class="ace-icon fa fa-angle-double-right"></i>
-                            概况 &amp; 数据统计
-                        </small>
-                    </h1>
-                </div><!-- /.page-header -->
+                <!-- /.page-header -->
 
                 <div class="row">
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
-                        <div class="alert alert-block alert-success">
-                            <button type="button" class="close" data-dismiss="alert">
+                        <div class="alert alert-info">
+                            <button class="close" data-dismiss="alert">
                                 <i class="ace-icon fa fa-times"></i>
                             </button>
 
-                            <i class="ace-icon fa fa-check green"></i>
-
-                            欢迎来到
-                            <strong class="green">
-                                后台管理系统
-                                <small>(v1.0)</small>
-                            </strong>,
-                            学期项目->java11
+                            <i class="ace-icon fa fa-hand-o-right"></i>
+                            用户管理
                         </div>
 
-                        <div class="hr hr32 hr-dotted"></div>
+                        <table id="grid-table"></table>
 
-                        <div id="charts1" style="width:600px;height:400px;margin:0 auto !important;text-align: center"></div><!-- /.col -->
-                        <div class="hr hr32 hr-dotted"></div>
-                        <div id="charts2" style="width:600px;height:400px;margin:0 auto !important;text-align: center"></div><!-- /.col -->
+                        <div id="grid-pager"></div>
 
                         <!-- PAGE CONTENT ENDS -->
                     </div><!-- /.col -->
@@ -496,28 +487,18 @@
 </script>
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 
-<!-- page specific plugin scripts -->
-
-<!--[if lte IE 8]>
-<script th:src="@{assets/js/excanvas.min.js}"></script>
-<![endif]-->
-<script th:src="@{/assets/js/jquery-ui.custom.min.js}"></script>
-<script th:src="@{/assets/js/jquery.ui.touch-punch.min.js}"></script>
-<script th:src="@{/assets/js/jquery.easypiechart.min.js}"></script>
-<script th:src="@{/assets/js/jquery.sparkline.index.min.js}"></script>
-<script th:src="@{/assets/js/jquery.flot.min.js}"></script>
-<script th:src="@{/assets/js/jquery.flot.pie.min.js}"></script>
-<script th:src="@{/assets/js/jquery.flot.resize.min.js}"></script>
-
 <!-- ace scripts -->
 <script th:src="@{/assets/js/ace-elements.min.js}"></script>
 <script th:src="@{/assets/js/ace.min.js}"></script>
 
+<!-- page specific plugin scripts -->
+<script th:src="@{/assets/js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/assets/js/jquery.jqGrid.min.js}"></script>
+<script th:src="@{/assets/js/grid.locale-en.js}"></script>
+
 <!-- inline scripts related to this page -->
 <script type="text/javascript" th:src="@{/js/disable_back.js}"></script>
-<script type="text/javascript" th:src="@{/js/echarts/echarts.js}"></script>
-<script type="text/javascript" th:src="@{/js/index.js}"></script>
-
+<script type="text/javascript" th:src="@{/js/product.js}"></script>
 
 </body>
 </html>

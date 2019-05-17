@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.qdu.mapper.ProductMapper">
+
+    <resultMap id="queryAllMap" type="product">
+        <result column="id" property="id"/>
+        <result column="createTime" property="createTime"/>
+        <result column="model" property="model"/>
+        <result column="note" property="note"/>
+        <result column="point" property="point"/>
+        <result column="title" property="title"/>
+        <result column="username" property="username"/>
+        <result column="p_url" property="pictureUrl"/>
+        <result column="url" property="fileUrl"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <select id="queryAll" resultMap="queryAllMap" parameterType="string">
+        ${statement}
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_product
+    </select>
+
+    <update id="disabledProducts" parameterType="list">
+        update t_product set state = -1 where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="update" parameterType="product">
+        update t_product set state = #{product.state} where id = #{product.id}
+    </update>
+
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.qdu.mapper.ProductTypeSalesMapper">
+
+
+    <select id="queryAll" resultType="producttypesales">
+        select tpe.name,sum(quantity) as quantity from t_orderitem tom left join t_product tpt on tom.product_id = tpt.id left join t_producttype tpe on tpt.model = tpe.id group by tpe.name
+    </select>
+
+</mapper>

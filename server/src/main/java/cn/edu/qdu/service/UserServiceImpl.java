@@ -1,7 +1,10 @@
 package cn.edu.qdu.service;
 
+import cn.edu.qdu.echarts.line.LineData;
+import cn.edu.qdu.echarts.line.LineItem;
 import cn.edu.qdu.mapper.UserMapper;
 import cn.edu.qdu.model.User;
+import cn.edu.qdu.util.DateUtil;
 import cn.edu.qdu.util.SQLUtil;
 import cn.edu.qdu.util.SearchMapping;
 import cn.edu.qdu.util.StringUtil;
@@ -12,9 +15,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Adam on 2019/5/11 17:45.
@@ -53,6 +54,33 @@ public class UserServiceImpl implements UserService{
             userMapper.update(new User(Integer.parseInt(param.getId()),param.getState(),param.getNote()));
         }
 
+    }
+
+    @Override
+    public LineData queryEveryDayIncreasedUserNum() {
+        List<LineItem> result = userMapper.queryEveryDayIncreasedUserNum();
+        LineData data = new LineData();
+        List<String> xAxisData = new ArrayList<>();
+        List<Integer> seriesData = new ArrayList<>();
+        data.setxAxisData(xAxisData);
+        data.setSeriesData(seriesData);
+        for(String day : DateUtil.getPastDays(7)) {
+            boolean isExists = false;
+            for(LineItem temp : result) {
+                if(day.equals(temp.getName())) {
+                    xAxisData.add(temp.getName());
+                    seriesData.add(temp.getValue());
+                    isExists = true;
+                    break;
+                }
+            }
+            if(!isExists) {
+                xAxisData.add(day);
+                seriesData.add(0);
+            }
+        }
+
+        return data;
     }
 
 }

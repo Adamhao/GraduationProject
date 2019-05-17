@@ -21,4 +21,9 @@
         update t_user set state = #{user.state},note = #{user.note} where id = #{user.id}
     </update>
 
+
+    <select id="queryEveryDayIncreasedUserNum" resultType="cn.edu.qdu.echarts.line.LineItem">
+        SELECT date(createTime) as name,count(1) as value FROM t_user tu where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(createTime) group by date(createTime)
+    </select>
+
 </mapper>

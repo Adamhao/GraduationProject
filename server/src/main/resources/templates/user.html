@@ -80,7 +80,7 @@
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
 
-                <!-- 邮箱 -->
+                <!-- 邮箱
                 <li class="green dropdown-modal">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
@@ -194,7 +194,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
 
                 <li class="light-blue dropdown-modal">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
@@ -244,7 +244,7 @@
             <li class="">
                 <a href="/admin/index">
                     <i class="menu-icon fa fa-tachometer"></i>
-                    <span class="menu-text"> 仪表盘 </span>
+                    <span class="menu-text"> 图表 </span>
                 </a>
 
                 <b class="arrow"></b>
@@ -280,7 +280,7 @@
 
                 <ul class="submenu">
                     <li class="">
-                        <a href="tables.html">
+                        <a href="javascript:alert('暂时不允许发布商品');">
                             <i class="menu-icon fa fa-caret-right"></i>
                             发布商品
                         </a>
@@ -288,7 +288,7 @@
                         <b class="arrow"></b>
                     </li>
                     <li class="">
-                        <a href="tables.html">
+                        <a href="/product/">
                             <i class="menu-icon fa fa-caret-right"></i>
                             商品管理
                         </a>
@@ -430,6 +430,8 @@
                             用户管理
                         </div>
 
+                        <div id="charts1" style="width:600px;height:400px;margin:0 auto !important;text-align: center"></div>
+                        <div class="hr hr32 hr-dotted"></div>
                         <table id="grid-table"></table>
 
                         <div id="grid-pager"></div>
@@ -498,6 +500,7 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript" th:src="@{/js/disable_back.js}"></script>
+<script type="text/javascript" th:src="@{/js/echarts/echarts.js}"></script>
 <script type="text/javascript" th:src="@{/js/user.js}"></script>
 
 </body>

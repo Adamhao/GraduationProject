@@ -39,49 +39,10 @@ var subgrid_data =
     ];
 
 jQuery(function ($) {
-
-    $.ajax({
-        type: 'POST',
-        url: '/echarts/queryEveryDayIncreasedUserNum',
-        success: function(result) {
-            // 基于准备好的dom，初始化echarts实例
-            var myChart1 = echarts.init(document.getElementById('charts1'));
-
-            // 指定图表的配置项和数据
-            option = {
-                title: {
-                    text: '七天内每日注册用户量'
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [{
-                    data: [8, 932, 901, 934, 1290, 1330, 1320],
-                    type: 'line'
-                }]
-            };
-            option.xAxis = {
-                type: 'category',
-                data: result.xAxisData
-            };
-            option.series = [{
-                data: result.seriesData,
-                type: 'line'
-            }];
-            // 使用刚指定的配置项和数据显示图表。
-            myChart1.setOption(option);
-            // console.log(result);
-        },
-        dataType: 'json'
-    });
-
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var lastsel2;
+
 
     var parent_column = $(grid_selector).closest('[class*="col-"]');
     //resize to fit page size
@@ -142,12 +103,21 @@ jQuery(function ($) {
             });
         },*/
 
-        url: '/user/queryAll',
+        /*
+         private Integer model;
+         private String note;
+         private Integer point;
+         private String title;
+         private String pictureUrl;
+         private String fileUrl;
+        */
+
+        url: '/product/queryAll',
         // data: grid_data,
         datatype: "json",
         mtype: 'POST',
         height: 250,
-        colNames: [' ', '用户名', '邮箱', '积分', '状态', '创建时间','备注'],
+        colNames: [' ', '用户名', '标题', '积分', '状态', '类别', '创建时间','备注'],
         colModel: [
             {
                 name: 'myac', index: 'id', width: 80, fixed: true, sortable: false, resize: false,align: 'center',
@@ -173,7 +143,7 @@ jQuery(function ($) {
                 unformat:函数名，以指定方法格式化数据
              */
             {name: 'username', index: 'username', width: 80,sorttype: "text", editable: false, editoptions: {size: "20", maxlength: "30"}},
-            {name: 'email', index: 'email', width: 200, sorttype: "text", editable: false},
+            {name: 'title', index: 'title', width: 200, sorttype: "text", editable: false},
             {name: 'point', index: 'point', width: 60, sorttype: "int", editable: false},
             /*{
                 name: 'state',
@@ -191,16 +161,25 @@ jQuery(function ($) {
                 width: 90,
                 editable: true,
                 edittype: "select",
-                editoptions: {value: "0:未激活;1:正常;-1:已封禁"},
+                editoptions: {value: "0:上架;-1:下架"},
                 formatter: "select"
             },
-            { name: 'createTime',index:'createTime',width:100,editable:false},
+            {
+                name: 'model',
+                index: 'model',
+                width: 90,
+                editable: false,
+                edittype: "select",
+                editoptions: {value : gettypes()},
+                formatter: "select"
+            },
+            { name: 'createTime',index:'createTime',width:100,editable:false,sorttype:"date",unformat: pickDate},
             {
                 name: 'note',
                 index: 'note',
                 width: 150,
                 sortable: false,
-                editable: true,
+                editable: false,
                 edittype: "textarea",
                 editoptions: {rows: "2", cols: "10"}
             }
@@ -232,8 +211,8 @@ jQuery(function ($) {
             }, 0);
         },
 
-        editurl: "/user/update",//nothing is saved
-        caption: "用户管理",
+        editurl: "/product/update",//nothing is saved
+        caption: "商品管理",
         sortname: 'username',
         sortorder: 'desc'
 
@@ -495,4 +474,35 @@ jQuery(function ($) {
         $.jgrid.gridDestroy(grid_selector);
         $('.ui-jqdialog').remove();
     });
+
+    function gettypes(){
+
+//动态生成select内容
+        var str="";
+        $.ajax({
+            type:"post",
+            async:false,
+            url:"/producttype/queryAll",
+            success:function(data){
+                if (data != null) {
+                    var jsonobj=eval(data);
+                    var length=jsonobj.length;
+                    for(var i=0;i<length;i++){
+                        if(i!=length-1){
+                            str+=jsonobj[i].id+":"+jsonobj[i].name+";";
+                        }else{
+                            str+=jsonobj[i].id+":"+jsonobj[i].name;// 这里是option里面的 value:label
+                        }
+                    }
+                    //$.each(jsonobj, function(i){
+                    //str+="personType:"+jsonobj[i].personType+";"
+                    //$("<option value='" + jsonobj[i].personType + "'>" + jsonobj[i].personType+ "</option>").appendTo(typeselect);
+                    //});
+                }
+            }
+        });
+        console.log(str);
+        return str;
+    }
+
 });
