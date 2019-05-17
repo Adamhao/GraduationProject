@@ -1,5 +1,7 @@
 package cn.edu.qdu.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -13,6 +15,7 @@ public class User {
     private String email;
     private int point;
     private int state;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
     private String note;
 

@@ -173,7 +173,7 @@ jQuery(function ($) {
                 unformat:函数名，以指定方法格式化数据
              */
             {name: 'username', index: 'username', width: 80,sorttype: "text", editable: false, editoptions: {size: "20", maxlength: "30"}},
-            {name: 'email', index: 'email', width: 200, sorttype: "text", editable: false},
+            {name: 'email', index: 'email', width: 150, sorttype: "text", editable: false},
             {name: 'point', index: 'point', width: 60, sorttype: "int", editable: false},
             /*{
                 name: 'state',
@@ -192,9 +192,15 @@ jQuery(function ($) {
                 editable: true,
                 edittype: "select",
                 editoptions: {value: "0:未激活;1:正常;-1:已封禁"},
-                formatter: "select"
+                formatter: "select",
+                stype: 'select',
+                searchoptions: {
+                    value: "0:未激活;1:正常;-1:已封禁"
+                }
             },
-            { name: 'createTime',index:'createTime',width:100,editable:false},
+            { name: 'createTime',index:'createTime',width:150,editable:false,sorttype:"date",unformat: pickDate,stype:'type',searchoptions:{
+                dataInit : function (elem) {$(elem).datepicker();}
+            }},
             {
                 name: 'note',
                 index: 'note',
@@ -202,7 +208,8 @@ jQuery(function ($) {
                 sortable: false,
                 editable: true,
                 edittype: "textarea",
-                editoptions: {rows: "2", cols: "10"}
+                editoptions: {rows: "2", cols: "10"},
+                search: false
             }
         ],
         guiStyle: "bootstrap",

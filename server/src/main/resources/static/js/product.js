@@ -162,7 +162,11 @@ jQuery(function ($) {
                 editable: true,
                 edittype: "select",
                 editoptions: {value: "0:上架;-1:下架"},
-                formatter: "select"
+                formatter: "select",
+                stype: 'select',
+                searchoptions: {
+                    value: "0:上架;-1:下架"
+                }
             },
             {
                 name: 'model',
@@ -171,9 +175,15 @@ jQuery(function ($) {
                 editable: false,
                 edittype: "select",
                 editoptions: {value : gettypes()},
-                formatter: "select"
+                formatter: "select",
+                stype: 'select',
+                searchoptions: {
+                    value : gettypes()
+                }
             },
-            { name: 'createTime',index:'createTime',width:100,editable:false,sorttype:"date",unformat: pickDate},
+            { name: 'createTime',index:'createTime',width:150,editable:false,sorttype:"date",unformat: pickDate,stype:'type',searchoptions:{
+                dataInit : function (elem) {$(elem).datepicker();}
+            }},
             {
                 name: 'note',
                 index: 'note',

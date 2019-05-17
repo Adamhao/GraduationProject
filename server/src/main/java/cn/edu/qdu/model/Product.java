@@ -1,5 +1,7 @@
 package cn.edu.qdu.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -11,6 +13,7 @@ import java.util.Date;
 public class Product {
     private Integer id;
     //private String code;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
     private Integer model;
     private String note;
