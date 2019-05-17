@@ -1,0 +1,6 @@
+mysql 3306
+orcal 1433
+dubbo	20880
+shiro
+zookeeper  2181
+redis 6379

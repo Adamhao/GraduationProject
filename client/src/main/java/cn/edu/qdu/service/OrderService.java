@@ -1,16 +1,150 @@
+/**
+ *
+ */
 package cn.edu.qdu.service;
 
-import java.util.Map;
+import cn.edu.qdu.common.Constants;
+import cn.edu.qdu.common.Page;
+import cn.edu.qdu.model.Order;
+import cn.edu.qdu.model.OrderItem;
+import cn.edu.qdu.model.Product;
+import cn.edu.qdu.model.User;
+import cn.edu.qdu.repository.OrderItemRepository;
+import cn.edu.qdu.repository.OrderRepository;
+import cn.edu.qdu.repository.ProductRepository;
+import cn.edu.qdu.util.UserUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Created by Bro_Dong on 2019/4/30.
- */
-public interface OrderService {
-    Map<String,Object> queryAll(Integer id,Integer page,Integer rows,Integer status);
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.List;
 
-    void updateGoodsNumDel(Integer id);
 
-    void updateGoodsNumAdd(Integer id);
+@Service
+@Transactional
+public class OrderService {
 
-    void deleteOne(Integer id);
+    @Autowired
+    OrderRepository orderDao;
+    @Autowired
+    OrderItemRepository orderItemDao;
+    @Autowired
+    ProductRepository productDao;
+    @Autowired
+    UserService userService;
+
+    /**
+     * 新建订单
+     *
+     * @param order
+     * @param orderItemList
+     */
+    public Order addOrder(Order order, List<OrderItem> orderItemList) {
+        Order save = save(order);
+        for (OrderItem orderItem : orderItemList) {
+            orderItemDao.save(orderItem);
+        }
+        return save;
+    }
+
+    public Order save(Order order) {
+        return orderDao.save(order);
+    }
+
+    public Order findById(Integer id) {
+        return orderDao.findOne(id);
+    }
+
+    public List<Order> findAll() {
+        return orderDao.findAll();
+    }
+
+    public List<Order> findOrders(Page<Order> page) {
+        page.setResult(orderDao.findAll(page.getPageable()).getContent());
+        page.setTotalCount(orderDao.count());
+        return page.getResult();
+    }
+
+    public List<Order> findOrders(Page<Order> page,Integer userId){
+        page.setResult(orderDao.findByUserId(userId,page.getPageable()).getContent());
+        page.setTotalCount(orderDao.countByUserId(userId));
+        return null;
+    }
+
+    /**
+     * 删除订单以及订单相关信息
+     *
+     * @param id 订单ID
+     */
+    public void deleteOrder(Integer id) {
+        orderItemDao.deleteByOrderId(id);
+        orderDao.delete(id);
+    }
+
+    /**
+     * 修改订单状态
+     *
+     * @param orderID
+     * @param status
+     */
+    public void updateOrderStatus(Integer orderID, Integer status) {
+        Order order = orderDao.findOne(orderID);
+        order.setStatus(status);
+        //状态修改时修改相应时间数据
+        if (status == Constants.OrderStatus.PAYED) {
+            order.setPayTime(new Date());
+        } else if (status == Constants.OrderStatus.SHIPPED) {
+            order.setShipTime(new Date());
+        } else if (status == Constants.OrderStatus.ENDED) {
+            order.setConfirmTime(new Date());
+        }
+        orderDao.save(order);
+    }
+
+    /**
+     * 验证订单归属人
+     *
+     * @param orderId
+     * @param userId
+     * @return
+     */
+    public boolean checkOwned(Integer orderId, Integer userId) {
+        return orderDao.findOne(orderId).getUser().getId().equals(userId);
+    }
+
+    public boolean pay(Integer orderId, User user, HttpSession session) {
+        Long point = user.getBalance();
+        Order order = orderDao.findOne(orderId);
+        if(point>=order.getFinalPrice()){
+            user.setBalance((long) (user.getBalance()-order.getFinalPrice()));
+            userService.save(user);
+            UserUtil.saveUserToSession(session,user);
+            order.setStatus(Constants.OrderStatus.ENDED);
+            order.setPayTime(new Date());
+            List<OrderItem> orderItems = order.getOrderItems();
+            for (OrderItem oi : orderItems) {
+                Product p = oi.getProduct();
+                User inputUser = p.getInputUser();
+                inputUser.setBalance(inputUser.getBalance()+p.getPoint());
+                userService.save(user);
+                p.setStock(p.getStock()+5);
+                productDao.save(p);
+            }
+            orderDao.save(order);
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+    public List<Product> getProductByOderByUserId(Page<Product> page, Integer userId){
+        org.springframework.data.domain.Page<Product> products = productDao.findByOrderByUserId(userId, page.getPageable());
+        page.setResult(products.getContent());
+        page.setTotalCount(products.getTotalElements());
+        return page.getResult();
+    }
+
 }

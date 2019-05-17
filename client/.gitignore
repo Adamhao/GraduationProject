@@ -1,29 +1,20 @@
-HELP.md
-/target/
-!.mvn/wrapper/maven-wrapper.jar
+# 本地化资源文件 #
+/src/main/resources/application.local.properties
+/src/test/resources/application.test.local.properties
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# MAC OS隐藏文件 #
+*~
+.DS_Store
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# IDE Config Files #
 *.iml
-*.ipr
+/.idea
+/.settings
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-/build/
-
-### VS Code ###
-.vscode/
+# Package Files #
+*.class
+*.jar
+*.war
+*.ear
+/target
+.ant_targets

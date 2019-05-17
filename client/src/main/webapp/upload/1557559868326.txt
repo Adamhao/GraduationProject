@@ -1,0 +1,12 @@
+json
+dom4j
+poi
+fileupload				ajaxFileUpload（js）
+smartupload				uploadify(jq)				
+bootsraptable
+时间空间
+树状列表menu
+pageHelper     
+FilenameUtils
+aspectJ
+jackson       ObjectMapper

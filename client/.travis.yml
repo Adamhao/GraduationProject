@@ -1,0 +1,24 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+before_install:
+  - mysql -e 'CREATE DATABASE Graduation;'
+
+test:
+  adapter: mysql
+  database: Graduation
+  username: Graduation
+  encoding: JDHG3JEBMTwk3kSj
+
+#install:
+#  - pip install coveralls
+
+notifications:
+  email:
+    recipients:
+      - zhangmc@666.com
+
+#after_success:
+#  - coveralls

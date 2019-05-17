@@ -1,0 +1,11 @@
+top  查看所有进程
+
+kill -9  PID  杀死进程      kill就是我们熟悉的那个
+
+当java进程的%CPU不在是满荷状态则显示tomcat已经启动结束
+
+serivces tomcat start
+
+ls   查看目录
+
+232台 15w
