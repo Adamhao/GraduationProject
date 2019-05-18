@@ -115,10 +115,10 @@ public class OrderService {
     }
 
     public boolean pay(Integer orderId, User user, HttpSession session) {
-        Long point = user.getBalance();
+        Long point = user.getPoint();
         Order order = orderDao.findOne(orderId);
         if(point>=order.getFinalPrice()){
-            user.setBalance((long) (user.getBalance()-order.getFinalPrice()));
+            user.setPoint((long) (user.getPoint()-order.getFinalPrice()));
             userService.save(user);
             UserUtil.saveUserToSession(session,user);
             order.setStatus(Constants.OrderStatus.ENDED);
@@ -127,7 +127,7 @@ public class OrderService {
             for (OrderItem oi : orderItems) {
                 Product p = oi.getProduct();
                 User inputUser = p.getInputUser();
-                inputUser.setBalance(inputUser.getBalance()+p.getPoint());
+                inputUser.setPoint(inputUser.getPoint()+p.getPoint());
                 userService.save(user);
                 p.setStock(p.getStock()+5);
                 productDao.save(p);

@@ -155,7 +155,6 @@ public class UserService {
 		user.setState(0);
 		user.setActivation_code(activation_code);
 		user.setCreateTime(new Date());
-		user.setBalance(0l);
 		user.setPoint(100l);
 		String context = "请点击该网址进行账号激活\n <a href='http://localhost:8080/user/activation?username="+user.getUsername()+"&activationCode="+activation_code+"'>http://localhost:8080/user/activation?username="+user.getUsername()+"</a>";
 		SendMailUtil.sendEmail(user.getEmail(),context);

@@ -187,7 +187,7 @@ public class UserController {
     @ResponseBody
     public Msg doCharge(@PathVariable("id") Integer id, @PathVariable("num") Integer num, HttpSession session, Model model) {
         User user = userService.findOne(id);
-        user.setBalance(user.getBalance()+num);
+        user.setPoint(user.getPoint()+num);
         userService.save(user);
         UserUtil.saveUserToSession(session,user);
         model.addAttribute("user", user);

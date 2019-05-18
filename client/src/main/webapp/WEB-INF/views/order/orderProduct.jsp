@@ -38,9 +38,9 @@
                     <td>${product.stock}</td>
                     <td>
                         <a class="btn btn-primary" href="${ctx }/user/product/download?url=${product.url}">下载</a>
-                        <c:if test="${product.url.endsWith('doc')||product.url.endsWith('docx')}">
+                        <%--<c:if test="${product.url.endsWith('doc')||product.url.endsWith('docx')}">--%>
                             <a class="btn btn-primary" style="color: #fff;" onclick="showPdf('${product.url}')">在线查看</a>
-                        </c:if>
+                        <%--</c:if>--%>
                     </td>
                 </tr>
             </c:forEach>

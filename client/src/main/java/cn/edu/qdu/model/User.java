@@ -39,11 +39,6 @@ public class User implements Serializable {
 	private String username;
 
 	/**
-	 * 账户余额
-	 */
-	private Long balance;
-
-	/**
 	 * 积分值
 	 */
 	private Long point;
@@ -190,14 +185,6 @@ public class User implements Serializable {
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
-	}
-
-	public Long getBalance() {
-		return balance;
-	}
-
-	public void setBalance(Long balance) {
-		this.balance = balance;
 	}
 
 	public String getEmail() {
