@@ -360,7 +360,7 @@ public class UserController {
     @ResponseBody
     public String checkPhoneIsTrue(String username,String phone){
         User user = userService.queryByUsername(username);
-        if(phone.equals(user.getTelPhone())){
+        if(phone.equals(user.getPhone())){
             return "true";
         }
         return "false";

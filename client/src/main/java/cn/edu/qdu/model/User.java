@@ -51,7 +51,7 @@ public class User implements Serializable {
 	/**
 	 * 手机号码
 	 */
-	private String telPhone;
+	private String phone;
 
 	/**
 	 * 地址
@@ -166,12 +166,12 @@ public class User implements Serializable {
 
 
 	@Length(min = 11, max = 11)
-	public String getTelPhone() {
-		return telPhone;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setTelPhone(String telPhone) {
-		this.telPhone = telPhone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@Length(min = 4, max = 50)

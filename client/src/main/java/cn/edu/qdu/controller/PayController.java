@@ -6,8 +6,10 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import cn.edu.qdu.common.AlipayConfig;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,13 +54,7 @@ public class PayController {
 //        AlipayConfig.logResult(result);// 记录支付日志
         response.setContentType("text/html; charset=gbk");
         PrintWriter out = response.getWriter();
-        out.print("<html>");
-        out.print("<head><title>");
-        out.print("支付</title></head>");
-        out.print("<body>");
-        out.print(result);
-        out.print("</body>");
-        out.print("</html>");
+        out.println(result);
         out.close();
     }
 
@@ -78,6 +74,20 @@ public class PayController {
 
     @RequestMapping(value = "/success")
     public String success(){
-        return "/redirect:/success";
+        return "redirect:/success";
     }
+
+    @RequestMapping(value = "/in",method = RequestMethod.GET)
+    public ModelAndView in(ModelAndView modelAndView,String title,Double price,String desc){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        // 商户订单号，商户网站订单系统中唯一订单号，必填
+        String out_trade_no = sdf.format(new Date());
+        modelAndView.addObject("title",title);
+        modelAndView.addObject("num",out_trade_no);
+        modelAndView.addObject("desc",desc);
+        modelAndView.addObject("price",price);
+        modelAndView.setViewName("user/pay/pay");
+        return modelAndView;
+    }
+
 }

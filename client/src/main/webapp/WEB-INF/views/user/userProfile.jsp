@@ -41,9 +41,9 @@
         </div>
         <div class="row">
             <div class="form-group col-sm-offset-3" style="width: 55%;">
-                <label for="telPhone" class="control-label">电话</label>
+                <label for="phone" class="control-label">电话</label>
                 <div class="">
-                    <input style="color:black;font-family: fantasy;font-size: 15px;" id="telPhone" readonly class="form-control" type="text" name="telPhone" value="${user.telPhone}"/>
+                    <input style="color:black;font-family: fantasy;font-size: 15px;" id="phone" readonly class="form-control" type="text" name="phone" value="${user.phone}"/>
                 </div>
             </div>
         </div>
@@ -52,14 +52,6 @@
                 <label for="bank" class="control-label">银行卡号</label>
                 <div class="">
                     <input style="color:black;font-family: fantasy;font-size: 15px;" id="bank" class="form-control" type="text" name="bank" value="${user.bank}"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-offset-3" style="width: 55%;">
-                <label for="balance" class="control-label">余额</label>
-                <div class="">
-                    <input style="color:black;font-family: fantasy;font-size: 15px;" id="balance" readonly class="form-control" type="text" name="balance" value="${user.balance}"/>
                 </div>
             </div>
         </div>
@@ -84,7 +76,6 @@
                 <div class="text-center">
                     <button style="margin-right: 2px;float: right;height: 25px;width: 101px;" type="submit" class="btn btn-primary">保存</button>
                     <a style="margin-right: 2px;float: right;height: 25px;width: 101px;" class="btn btn-success" href="${ctx }/user/recharge">充值</a>
-                    <a style="margin-right: 2px;float: right;height: 25px;width: 101px;" class="btn btn-success" onclick="Alipay()">充值1</a>
                 </div>
             </div>
         </div>
@@ -92,10 +83,5 @@
 </div>
 <!-- /container -->
 <%@include file="/common/footer.jsp" %>
-<script>
-    function Alipay() {
-        window.open("/pay/pay1?title=啤酒饮料矿泉水&price=100&desc=大哥真有钱");
-    }
-</script>
 </body>
 </html>
