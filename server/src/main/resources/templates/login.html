@@ -6,10 +6,26 @@
     <script th:src="@{/js/login.js}"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" th:href="@{/css/index_animate.css}"/>
     <meta charset="UTF-8">
     <title>管理员登录</title>
+    <style>
+        body {
+            /*background-color: #eee;*/
+            overflow: hidden;
+        }
+        #canvas {
+            background-color: #eee;
+            z-index: -1;
+            position : absolute;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
+<canvas id="canvas"></canvas>
+
 <div class="container">
     <div class="card card-container">
         <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
@@ -37,5 +53,6 @@
         <strong>提示!</strong> [[${result}]]
     </div>
 </div><!-- /container -->
+<script th:src="@{/js/index_animate.js}"></script>
 </body>
 </html>
