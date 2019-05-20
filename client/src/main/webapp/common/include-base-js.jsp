@@ -14,6 +14,7 @@
 <script src="${ctx }/static/plugins/parallax-js-master/parallax.min.js"></script>
 <script src="${ctx }/static/styles/custom.js"></script>
 <script src="${ctx }/common/bootstrap/js/bootstrapValidator.min.js" type="text/javascript"></script>
+<script src="${ctx }/static/styles/star/star-rating.min.js" type="text/javascript"></script>
 
 <%--<script src="${ctx }/common/js/jquery.min.js" type="text/javascript"></script>--%>
 <%--<script src="${ctx }/common/bootstrap/js/bootstrap.js" type="text/javascript"></script>--%>

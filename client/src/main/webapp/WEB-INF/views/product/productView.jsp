@@ -8,6 +8,12 @@
 <%@ include file="/common/meta.jsp"%>
 <%@ include file="/common/include-base-styles.jsp"%>
 <link type="text/css" rel="stylesheet" href="${ctx}/css/index.css"/>
+    <style>
+        .rating-container {
+            display:inline-block !important;
+            float:right !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,6 +39,34 @@
                 <p>
                     <a class="btn btn-primary btn-lg  btn-block addCart" productid="${product.id}" style="color: #fff;" role="button" onclick="cart()">加入购物车</a>
                 </p>
+                <div>
+                    <c:forEach var="comment" items="${comments}" varStatus="status">
+
+                        <!-- First Comment -->
+                        <article class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="panel panel-default arrow left">
+                                    <div class="panel-body">
+                                        <header class="text-left">
+                                            <div class="comment-user"><i class="fa fa-user"></i> ${comment.username}
+                                                <input type="number" class="rating" min=0 max=5 step=1 data-size="xs" readonly="readonly" value="${comment.rate}">
+                                            </div>
+                                            <time class="comment-date" datetime=""><i class="fa fa-clock-o"></i><fmt:formatDate value="${comment.commentTime}" pattern="yyyy-MM-dd HH:mm:ss"/> </time>
+                                        </header>
+                                        <hr>
+                                        <div class="comment-post">
+                                            <p>
+                                                <strong>${comment.content == null || comment.content == '' ? "买家默认评价": comment.content}</strong>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                    </c:forEach>
+
+                </div>
             </div>
         </div>
     </div>

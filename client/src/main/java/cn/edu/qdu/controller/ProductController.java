@@ -1,10 +1,14 @@
 package cn.edu.qdu.controller;
 
 import cn.edu.qdu.common.Page;
+import cn.edu.qdu.model.OrderItem;
 import cn.edu.qdu.model.Product;
+import cn.edu.qdu.model.vo.Comment;
+import cn.edu.qdu.repository.OrderItemRepository;
 import cn.edu.qdu.repository.ProductTypeRepository;
 import cn.edu.qdu.service.ProductService;
 import cn.edu.qdu.util.ConvertToPDF;
+import cn.edu.qdu.util.Msg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -30,6 +36,9 @@ public class ProductController {
 
     @Autowired
     ProductTypeRepository productTypeDao;
+
+    @Autowired
+    OrderItemRepository orderItemDao;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView listProduct(ModelAndView modelAndView, HttpServletRequest request,String title,Integer model) {
@@ -45,6 +54,26 @@ public class ProductController {
     @RequestMapping(value = "/{id}")
     public String showInfo(@PathVariable Integer id, Model model) {
         Product product = productService.findById(id);
+        List<OrderItem> byProductId = orderItemDao.findByProductId(id);
+        List<Comment> comments = new ArrayList<>();
+        for (OrderItem orderItem : byProductId) {
+            Comment comment = new Comment();
+            comment.setId(orderItem.getId());
+            comment.setUsername(orderItem.getOrder().getUser().getUsername());
+            comment.setContent(orderItem.getComment());
+            comment.setRate(orderItem.getRate());
+            comment.setCommentTime(orderItem.getCommentTime());
+            String ids = orderItem.getIds();
+            Integer num = 0;
+            if (ids==null||ids.trim().length()==0) {
+                num=0;
+            }else {
+                num=ids.trim().length();
+            }
+            comment.setFav(num);
+            comments.add(comment);
+        }
+        model.addAttribute("comments",comments);
         model.addAttribute("product", product);
         return "product/productView";
     }
@@ -138,6 +167,32 @@ public class ProductController {
             out.close();
         }
 
+    }
+
+    @RequestMapping(value = "/addComment",method = RequestMethod.POST)
+    @ResponseBody
+    public Msg addComment(Integer id,Integer rate,String content){
+        OrderItem one = orderItemDao.findOne(id);
+        one.setStatus(0);
+        one.setRate(rate);
+        one.setComment(content);
+        orderItemDao.save(one);
+        return Msg.success();
+    }
+
+    @RequestMapping(value = "/addFav/{oid}/{uid}",method = RequestMethod.GET)
+    @ResponseBody
+    public Msg addFav(Integer oid,Integer uid){
+        OrderItem one = orderItemDao.findOne(oid);
+        String ids = one.getIds();
+        if (ids==null||ids.trim().length()==0) {
+            ids=""+uid;
+        }else {
+            ids+=","+uid;
+        }
+        one.setIds(ids);
+        orderItemDao.save(one);
+        return Msg.success();
     }
 
 }

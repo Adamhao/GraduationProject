@@ -5,6 +5,7 @@ package cn.edu.qdu.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
@@ -19,6 +20,9 @@ public class OrderItem implements Serializable {
 	private Order order;//关联订单
 	private Integer status;//状态
 	private String comment;//评价
+	private Integer rate;//评分
+	private String ids;
+	private Date commentTime;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,5 +67,29 @@ public class OrderItem implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public Integer getRate() {
+		return rate;
+	}
+
+	public void setRate(Integer rate) {
+		this.rate = rate;
+	}
+
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+
+	public Date getCommentTime() {
+		return commentTime;
+	}
+
+	public void setCommentTime(Date commentTime) {
+		this.commentTime = commentTime;
 	}
 }
