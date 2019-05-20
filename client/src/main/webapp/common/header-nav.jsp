@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col">
                     <div style="height: 100px;" class="header_content d-flex flex-row align-items-center justify-content-start">
-                        <div class="logo"><a href="/">Sublime.</a></div>
+                        <div class="logo"><a href="/">主页</a></div>
                         <nav class="main_nav">
                             <ul>
                                 <li></li>

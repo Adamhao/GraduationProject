@@ -132,7 +132,7 @@ public class User implements Serializable {
 	}
 
 	@NotEmpty
-	@Length(min = 6, max = 14)
+	@Length(min = 5, max = 14)
 	public String getPassword() {
 		return password;
 	}

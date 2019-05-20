@@ -19,7 +19,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 "/user/*","/order/*","/cart/*"
         ).excludePathPatterns("/user/login","/user/reg","/user/logout",
                 "/user/activation","/user/checkCode","/user/checkPhone","/user/checkEmail","/user/checkPhoneIsTrue","/user/checkNameIsTrue",
-                "/user/checkName","/user/addUser");
+                "/user/checkName","/user/addUser","/user/updatePassword","/user/updatePwdByTel","/user/updatePwdByEmail","/user/doUpdatePwdByEmail","/user/doUpdatePwdByTel");
 
     }
 
