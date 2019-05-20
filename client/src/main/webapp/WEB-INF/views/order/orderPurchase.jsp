@@ -23,7 +23,6 @@
                     <td>型号</td>
                     <td>后缀</td>
                     <td>价格</td>
-                    <td>数量</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,7 +33,6 @@
                         <td>${ci.product.model.name}</td>
                         <td>${ci.product.postfix}</td>
                         <td>${ci.product.point}</td>
-                        <td>${ci.total}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

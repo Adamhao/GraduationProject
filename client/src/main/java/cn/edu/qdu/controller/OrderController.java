@@ -91,14 +91,13 @@ public class OrderController {
             Product p = oi.getProduct();
             p.setStock(p.getStock()+5);
             productDao.save(p);
-            totalSum = totalSum.add(new BigDecimal(oi.getProduct().getPoint() * oi.getQuantity()));
+            totalSum = totalSum.add(new BigDecimal(oi.getProduct().getPoint()));
             oi.setOrder(order);
         }
         order.setTotalPrice(totalSum.doubleValue());
         order.setFinalPrice(totalSum.doubleValue());
         order.setOrderItems(oiList);
         order.setUser(UserUtil.getUserFromSession(session));
-        //地址保存
         Order saveOrder = orderService.addOrder(order, oiList);
         CartUtil.cleanCart(session);
         model.addAttribute("orderId",saveOrder.getId());
@@ -157,7 +156,7 @@ public class OrderController {
         if(user==null){
             return "redirect:/user/login";
         }
-        Page<Product> page = new Page<>(request);
+        Page<OrderItem> page = new Page<>(request);
         orderService.getProductByOderByUserId(page, user.getId());
         model.addAttribute("page", page);
         return "order/orderProduct";

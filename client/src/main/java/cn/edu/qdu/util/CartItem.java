@@ -5,11 +5,9 @@ import cn.edu.qdu.model.Product;
 
 public class CartItem {
     private Product product;//商品
-    private Integer total;//数量
 
-    public CartItem(Product product, Integer total) {
+    public CartItem(Product product) {
         this.product = product;
-        this.total = total;
     }
 
     public Product getProduct() {
@@ -20,11 +18,4 @@ public class CartItem {
         this.product = product;
     }
 
-    public Integer getTotal() {
-        return total;
-    }
-
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
 }

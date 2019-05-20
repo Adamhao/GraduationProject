@@ -25,7 +25,6 @@ public class Order implements Serializable {
     private List<OrderItem> orderItems;//关联商品
     private Date createTime;//创建时间
     private Date payTime;//付款时间
-    private Date shipTime;//发货时间
     private Date confirmTime;//确认收货时间
     private Integer status;//状态
     private Double finalPrice;//实际成交价
@@ -92,15 +91,6 @@ public class Order implements Serializable {
 
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
-    }
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
-    public Date getShipTime() {
-        return shipTime;
-    }
-
-    public void setShipTime(Date shipTime) {
-        this.shipTime = shipTime;
     }
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")

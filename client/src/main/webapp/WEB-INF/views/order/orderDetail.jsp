@@ -19,6 +19,7 @@
             <tr>
                 <td>名称</td>
                 <td>型号</td>
+                <td>后缀</td>
                 <td>总价</td>
                 <td>操作</td>
             </tr>
@@ -28,6 +29,7 @@
                 <tr pid="${orderItem.id}">
                     <td><a href="${ctx}/product/${orderItem.product.id}">${orderItem.product.title}</a></td>
                     <td>${orderItem.product.model.name}</td>
+                    <td>${orderItem.product.postfix}</td>
                     <td>${orderItem.product.point}</td>
                     <td>
                         <c:choose>

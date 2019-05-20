@@ -26,15 +26,12 @@ public class CartUtil {
      */
     public static synchronized void saveProductToCart(HttpSession session, Product product, Integer total) {
         Map<Integer, CartItem> cartItemMap = (HashMap<Integer, CartItem>) session.getAttribute(CART);
-        CartItem ci = new CartItem(product, total);
+        CartItem ci = new CartItem(product);
         if (cartItemMap == null) {
             cartItemMap = new HashMap < Integer, CartItem > ();
         }
         //判断当前购物车中是否包含此商品
         if (cartItemMap.containsKey(product.getId())) {
-            CartItem currentCi = cartItemMap.get(product.getId());
-            currentCi.setTotal(currentCi.getTotal() + total);
-            cartItemMap.put(product.getId(), currentCi);
         } else {
             cartItemMap.put(product.getId(), ci);
         }
@@ -77,9 +74,7 @@ public class CartUtil {
         for(CartItem ci:cartItemMap.values()){
             OrderItem oi = new OrderItem();
             oi.setProduct(ci.getProduct());
-            oi.setQuantity(ci.getTotal());
-            oiList
-                    .add(oi);
+            oiList.add(oi);
         }
         return oiList;
     }
