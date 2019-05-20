@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class OrderService {
     public Order addOrder(Order order, List<OrderItem> orderItemList) {
         Order save = save(order);
         for (OrderItem orderItem : orderItemList) {
+            orderItem.setStatus(0);
             orderItemDao.save(orderItem);
         }
         return save;
@@ -95,9 +97,7 @@ public class OrderService {
         //状态修改时修改相应时间数据
         if (status == Constants.OrderStatus.PAYED) {
             order.setPayTime(new Date());
-        } else if (status == Constants.OrderStatus.SHIPPED) {
-            order.setShipTime(new Date());
-        } else if (status == Constants.OrderStatus.ENDED) {
+        }  else if (status == Constants.OrderStatus.ENDED) {
             order.setConfirmTime(new Date());
         }
         orderDao.save(order);
@@ -115,10 +115,10 @@ public class OrderService {
     }
 
     public boolean pay(Integer orderId, User user, HttpSession session) {
-        Long point = user.getBalance();
+        Long point = user.getPoint();
         Order order = orderDao.findOne(orderId);
         if(point>=order.getFinalPrice()){
-            user.setBalance((long) (user.getBalance()-order.getFinalPrice()));
+            user.setPoint((long) (user.getPoint()-order.getFinalPrice()));
             userService.save(user);
             UserUtil.saveUserToSession(session,user);
             order.setStatus(Constants.OrderStatus.ENDED);
@@ -127,7 +127,7 @@ public class OrderService {
             for (OrderItem oi : orderItems) {
                 Product p = oi.getProduct();
                 User inputUser = p.getInputUser();
-                inputUser.setBalance(inputUser.getBalance()+p.getPoint());
+                inputUser.setPoint(inputUser.getPoint()+p.getPoint());
                 userService.save(user);
                 p.setStock(p.getStock()+5);
                 productDao.save(p);
@@ -140,10 +140,10 @@ public class OrderService {
 
     }
 
-    public List<Product> getProductByOderByUserId(Page<Product> page, Integer userId){
-        org.springframework.data.domain.Page<Product> products = productDao.findByOrderByUserId(userId, page.getPageable());
-        page.setResult(products.getContent());
-        page.setTotalCount(products.getTotalElements());
+    public List<OrderItem> getProductByOderByUserId(Page<OrderItem> page, Integer userId){
+        org.springframework.data.domain.Page<OrderItem> list = orderItemDao.findByUserId(userId, page.getPageable());
+        page.setResult(list.getContent());
+        page.setTotalCount(list.getTotalElements());
         return page.getResult();
     }
 

@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">手机号码：</label>
                     <div class="col-sm-6">
-                        <input id="phone" name="telPhone" class="form-control" type="tel" placeholder="请输入您的手机号码">
+                        <input id="phone" name="phone" class="form-control" type="tel" placeholder="请输入您的手机号码">
                     </div>
                     <button type="button" id="checkPhone" class="btn btn-primary" onclick="check()" style="width: 150px;height: 30px;">发送验证码</button>
                 </div>

@@ -39,11 +39,6 @@ public class User implements Serializable {
 	private String username;
 
 	/**
-	 * 账户余额
-	 */
-	private Long balance;
-
-	/**
 	 * 积分值
 	 */
 	private Long point;
@@ -51,7 +46,7 @@ public class User implements Serializable {
 	/**
 	 * 手机号码
 	 */
-	private String telPhone;
+	private String phone;
 
 	/**
 	 * 地址
@@ -137,7 +132,7 @@ public class User implements Serializable {
 	}
 
 	@NotEmpty
-	@Length(min = 6, max = 14)
+	@Length(min = 5, max = 14)
 	public String getPassword() {
 		return password;
 	}
@@ -166,12 +161,12 @@ public class User implements Serializable {
 
 
 	@Length(min = 11, max = 11)
-	public String getTelPhone() {
-		return telPhone;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setTelPhone(String telPhone) {
-		this.telPhone = telPhone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@Length(min = 4, max = 50)
@@ -190,14 +185,6 @@ public class User implements Serializable {
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
-	}
-
-	public Long getBalance() {
-		return balance;
-	}
-
-	public void setBalance(Long balance) {
-		this.balance = balance;
 	}
 
 	public String getEmail() {

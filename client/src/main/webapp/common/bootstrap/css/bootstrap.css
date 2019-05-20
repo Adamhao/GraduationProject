@@ -2425,10 +2425,10 @@ input[type="button"].btn-block {
   content: "\e005";
 }
 .glyphicon-star:before {
-  content: "\e006";
+  content: "♥";
 }
 .glyphicon-star-empty:before {
-  content: "\e007";
+  content: "♥";
 }
 .glyphicon-user:before {
   content: "\e008";
@@ -2650,7 +2650,7 @@ input[type="button"].btn-block {
   content: "\e081";
 }
 .glyphicon-minus-sign:before {
-  content: "\e082";
+  content: "✖";
 }
 .glyphicon-remove-sign:before {
   content: "\e083";

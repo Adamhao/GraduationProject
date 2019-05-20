@@ -70,6 +70,45 @@ public class UserController {
         return "user/userReg";
     }
 
+    /*@RequestMapping("/updatePassword")
+    public String goUpdatePassword(){
+        return "redirect:/user/userUpdatePassword";
+    }*/
+
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.GET)
+    public String updatePwd() {
+        return "user/userUpdatePassword";
+    }
+
+    @RequestMapping(value = "/updatePwdByTel", method = RequestMethod.GET)
+    public String updatePwdByTel() {
+        return "user/userUpdatePasswordByTel";
+    }
+
+    @RequestMapping(value = "/doUpdatePwdByTel", method = RequestMethod.POST)
+    public String doUpdatePwdByTel(User user) {
+        try {
+            userService.updatePwdByTel(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/user/login";
+    }
+
+    @RequestMapping(value = "/updatePwdByEmail", method = RequestMethod.GET)
+    public String updatePwdByEmail() {
+        return "user/userUpdatePasswordByEmail";
+    }
+
+    @RequestMapping(value = "/doUpdatePwdByEmail", method = RequestMethod.POST)
+    public String doUpdatePwdByEmail(User user) {
+        try {
+            userService.updatePwdByEmail(user);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/user/login";
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginForm(HttpServletRequest request, HttpSession session) {
@@ -187,7 +226,7 @@ public class UserController {
     @ResponseBody
     public Msg doCharge(@PathVariable("id") Integer id, @PathVariable("num") Integer num, HttpSession session, Model model) {
         User user = userService.findOne(id);
-        user.setBalance(user.getBalance()+num);
+        user.setPoint(user.getPoint()+num);
         userService.save(user);
         UserUtil.saveUserToSession(session,user);
         model.addAttribute("user", user);
@@ -360,7 +399,7 @@ public class UserController {
     @ResponseBody
     public String checkPhoneIsTrue(String username,String phone){
         User user = userService.queryByUsername(username);
-        if(phone.equals(user.getTelPhone())){
+        if(phone.equals(user.getPhone())){
             return "true";
         }
         return "false";
@@ -420,8 +459,4 @@ public class UserController {
         return vcode.toString();
     }
 
-    @RequestMapping("/updatePassword")
-    public String goUpdatePassword(){
-        return "redirect:/user/userUpdatePassword";
-    }
 }

@@ -155,9 +155,8 @@ public class UserService {
 		user.setState(0);
 		user.setActivation_code(activation_code);
 		user.setCreateTime(new Date());
-		user.setBalance(0l);
 		user.setPoint(100l);
-		String context = "请点击该网址进行账号激活\n <a href='http://localhost:8080/user/activation?username="+user.getUsername()+"&activationCode="+activation_code+"'>http://localhost:8080/user/activation?username="+user.getUsername()+"</a>";
+		String context = "请点击该网址进行账号激活\n <a href='http://localhost:8080/user/activation?username="+user.getUsername()+"&activationCode="+activation_code+"'>点这里</a>";
 		SendMailUtil.sendEmail(user.getEmail(),context);
 		userDao.save(user);
     }
@@ -168,5 +167,22 @@ public class UserService {
 
 	public void updateStatus(Integer id) {
 		userDao.updateStatusById(id);
+	}
+
+	public void updatePwdByEmail(User user) throws MessagingException {
+		User u = userDao.findByUsername(user.getUsername());
+		u.setPassword(user.getPassword());
+		u.setState(0);
+		String activation_code = UUID.randomUUID().toString().replaceAll("-", "");
+		u.setActivation_code(activation_code);
+		String context = "请点击该网址进行账号激活\n <a href='http://localhost:8080/user/activation?username="+user.getUsername()+"&activationCode="+activation_code+"'>点这里</a>";
+		SendMailUtil.sendEmail(user.getEmail(),context);
+		userDao.save(u);
+	}
+
+	public void updatePwdByTel(User user) {
+		User u = userDao.findByUsername(user.getUsername());
+		u.setPassword(user.getPassword());
+		userDao.save(u);
 	}
 }
