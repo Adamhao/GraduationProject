@@ -108,11 +108,16 @@
         </dependency>
 
 
+        <!-- https://mvnrepository.com/artifact/org.artofsolving.jodconverter/jodconverter-core -->
         <dependency>
             <groupId>org.artofsolving.jodconverter</groupId>
             <artifactId>jodconverter-core</artifactId>
-            <version>3.0-beta-4</version>
+            <version>3.0-beta-4-jahia3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/libs/jodconverter-core-3.0-beta-4.jar</systemPath>
         </dependency>
+
+
 
         <!-- https://mvnrepository.com/artifact/org.openoffice/unoil -->
         <dependency>
