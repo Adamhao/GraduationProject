@@ -15,15 +15,16 @@
 <div class="container">
     <div class="row" style="margin-top: 10px;margin-bottom: 10px;margin-left: 50px;">
         <label for="titile">名称</label><input type="text" id="titile"/>
-        <label style="margin-left: 30px" for="model">型号</label>
+        <label style="margin-left: 30px" for="model">类型</label>
         <select type="text" id="model">
             <option value="">全部</option>
             <c:forEach items="${types}" var="type">
                 <option value="${type.id}">${type.name}</option>
             </c:forEach>
         </select>
-        <button class="btn btn-primary" style="margin-left: 20px;" onclick="search()">筛选</button>
+        <button class="btn btn-primary" style="margin-left: 20px;" onclick="search()"><span class="glyphicon glyphicon-search"></span>筛选</button>
     </div>
+    <hr style="margin: 50px 0px;"/>
     <div class="row">
         <c:forEach items="${page.result}" var="product">
             <c:set var="task" value="${leave.task }"/>

@@ -4,7 +4,8 @@
 <footer class="footer">
     <%--相对路径跳转后影响加载--%>
     <%--<div class="footer_background" style="background-image:url(../static/images/footer.jpg)"></div>--%>
-    <div class="footer_background" style="background-image:url(/static/images/footer.jpg)"></div>
+    <%--<div class="footer_background" style="background-image:url(/static/images/footer.jpg)"></div>--%>
+    <div class="footer_background" style="background-color:#eee"></div>
     <div class="container">
         <div class="row">
             <div class="col">

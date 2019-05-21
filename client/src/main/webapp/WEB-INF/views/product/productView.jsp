@@ -47,6 +47,11 @@
 
         <div class="row">
             <div class="col-md-10 text-align">
+                <h3>评论</h3>
+                <hr/>
+                <c:if test="${comments == null || empty comments}">
+                    <h5>暂无评价</h5>
+                </c:if>
                 <c:forEach var="comment" items="${comments}" varStatus="status">
 
                     <!-- First Comment -->
