@@ -24,24 +24,29 @@
         </select>
         <button class="btn btn-primary" style="margin-left: 20px;" onclick="search()"><span class="glyphicon glyphicon-search"></span>筛选</button>
     </div>
-    <hr style="margin: 50px 0px;"/>
     <div class="row">
         <c:forEach items="${page.result}" var="product">
             <c:set var="task" value="${leave.task }"/>
             <c:set var="pi" value="${leave.processInstance }"/>
             <div class="col-md-3 col-sm-4 col-xs-6 text-center">
-                <a href="${ctx}/product/${product.id}"><img class="img-thumbnail" src="${ctx}${product.masterPic.url}"
-                                                            style="width: 140px; height: 140px;"></a>
+                <div class="thumbnail">
+                    <a href="${ctx}/product/${product.id}">
+                        <img class="img-thumbnail" src="${ctx}${product.masterPic.url}"
+                             style="width: 140px; height: 140px;">
+                    </a>
+                    <div class="caption">
+                        <p>${product.title}</p>
 
-                <p>${product.title}</p>
+                        <p class="price" style="margin-bottom: 0px">价格：$${product.point}</p>
+                        <p>（${product.postfix}） <span class="price">Hot：${product.stock}</span></p>
 
-                <p class="price">$${product.point}</p>
-                <p>（${product.postfix}）     <span class="price">Hot：${product.stock}</span></p>
-
-                <p>
-                    <a class="btn btn-info" href="${ctx}/product/${product.id}" role="button">查看</a>
-                    <a class="btn btn-primary addCart" productid="${product.id}" role="button" href="#" onclick="cart()">购买</a>
-                </p>
+                        <p>
+                            <a style="width: 100px;" class="btn btn-info" href="${ctx}/product/${product.id}" role="button">查看</a>
+                            <a style="width: 100px;" class="btn btn-primary addCart" productid="${product.id}" role="button" href="#"
+                               onclick="cart()">购买</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </c:forEach>
     </div>
