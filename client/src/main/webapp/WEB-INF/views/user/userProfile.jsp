@@ -11,7 +11,7 @@
     <%@ include file="/common/include-base-js.jsp" %>
     <script src="${ctx }/js/user.js" type="text/javascript"></script>
     <script type="text/javascript"
-            src="http://api.map.baidu.com/api?v=2.0&ak=a5193mPqYAGrdbEAfiOu8YSuXcMj4QA7"></script>
+            src="http://api.map.baidu.com/api?v=2.0&ak=4znoQGAV9joXO1O0Z3eKDxrkCRy0G1pq"></script>
 </head>
 
 <body>
@@ -74,9 +74,9 @@
             <div class="form-group col-sm-offset-3" style="width: 55%;">
                 <label for="suggestId" class="control-label">地址</label>
                 <div class="r-result">
-                    <input type="hidden" id="add" value="${user.address}">
+                    <input type="text" id="add" value="${user.address}">
                     <input id="suggestId" style="color:black;font-family: fantasy;font-size: 15px;" class="form-control"
-                           type="text" name="address" />
+                           type="text" name="address" value="${user.address}"/>
                     <div id="l-map"></div>
                     <div id="searchResultPanel"
                          style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
@@ -135,12 +135,10 @@
     var myValue;
     ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
         var _value = e.item.value;
-        console.log(_value);
         myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-        console.log("onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue);
-        G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+        // G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
 
-        setPlace();
+        // setPlace();
     });
 
     function setPlace() {
@@ -156,12 +154,6 @@
         });
         local.search(myValue);
     }
-
-    function some(){
-        var address = $("#add").val();
-        G("searchResultPanel").innerHTML = "onconfirm<br />index = " + 0 + "<br />myValue = " + address;
-    }
-    some();
 </script>
 </body>
 </html>

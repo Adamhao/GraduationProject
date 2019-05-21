@@ -45,7 +45,7 @@ public class OrderService {
     public Order addOrder(Order order, List<OrderItem> orderItemList) {
         Order save = save(order);
         for (OrderItem orderItem : orderItemList) {
-            orderItem.setStatus(0);
+            orderItem.setStatus(1);
             orderItemDao.save(orderItem);
         }
         return save;
