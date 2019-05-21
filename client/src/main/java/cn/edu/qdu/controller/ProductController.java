@@ -57,6 +57,9 @@ public class ProductController {
         List<OrderItem> byProductId = orderItemDao.findByProductId(id);
         List<Comment> comments = new ArrayList<>();
         for (OrderItem orderItem : byProductId) {
+            if(orderItem.getStatus()==1){
+                continue;
+            }
             Comment comment = new Comment();
             comment.setId(orderItem.getId());
             comment.setUsername(orderItem.getOrder().getUser().getUsername());
